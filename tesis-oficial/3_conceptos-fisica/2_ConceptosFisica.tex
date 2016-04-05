@@ -1,0 +1,208 @@
+\chapter{Conceptos Físicos\label{conceptos-fisica}}
+
+En esta sección se presentará una breve descripción de los conceptos físicos relevantes para comprender de una manera general el diseño y funcionamiento del detector Preshower. La finalidad de esta sección es entregar al lector, con conocimientos básicos en física moderna, los conceptos principales que le permitirán comprender de manera general las decisiones de diseño tanto en la construcción del detector, pero principalmente, en la propuesta de algoritmo de reconstrucción. Para mayor información y un tratamiento más técnico de los temas el lector se puede dirigir a \cite{soria2011fisica,leo2012techniques,green2000physics}.
+
+\section{Paso de partículas por la materia}
+El estudio de las interacciones de las partículas con la materia constituye la base del estudio de los detectores. Un detector detectará una partícula mediante las interacciones que esta tiene con los materiales del detector, por lo que el estudio de las principales interacciones de las partículas con la materia es indispensable para entender el funcionamiento de los detectores.
+
+\subsection{Sección eficaz y recorrido libre}
+La sección eficaz es un concepto fundamental en la física de partículas. Este se relaciona con la probabilidad de interacción de un partícula con un blanco. Considerar un haz de partículas que incide en un blanco de modo que son dispersadas (en parte) en un ángulo $\theta$ en dirección de un detector, siendo el blanco de área $A$ menor que la superficie del haz. Considerar que el flujo de partículas en el haz es $F[cm^{-2}s^{-1}]$ (número de partículas por unidad de área y por unidad de tiempo). Además considerar que el blanco $X$ es muy delgado ($\delta x$), de manera que la probabilidad de que las partículas del blanco se posicionen una delante de otra es baja. También, el blanco tiene una densidad de $N$ partículas, es decir que el haz incidente verá $N\delta x$ partículas. Considerar el número de partículas que son dispersadas en el ángulo $d\Omega$ del detector, por unidad de tiempo. Sea, también, $N_s$ el número promedio de partículas dispersadas en aquella dirección, entonces se puede definir la sección eficaz diferencial como:
+\begin{equation}
+\frac{d\sigma}{d\Omega} (E, \Omega) = \frac{1}{F}\frac{dN_s}{d\Omega}, \nonumber
+\end{equation}
+que es la fracción promedio de partículas dispersadas hacia $d\Omega$ por unidad de tiempo y por unidad de flujo. La sección eficaz total se define como 
+\begin{equation}
+\sigma(E) = \int d\Omega \frac{d\sigma}{d\Omega}.\nonumber
+\end{equation}
+Ahora, debido a que el área del blanco es menor que el haz, el número de partículas que pueden interactuar del haz es $N_{inc}=FA$ y el número promedio de partículas dispersadas en $d\Omega$ es:
+\begin{equation}
+N_s(\Omega) = FAN\delta x \frac{d\sigma}{d\Omega},\nonumber
+\end{equation}
+entonces, el número de partículas dispersadas en todos los ángulos es
+\begin{equation}
+N_{tot} = FAN\delta x \sigma = N_{inc}N\delta x \sigma,\nonumber
+\end{equation}
+de esta manera se puede definir la probabilidad de interacción de una partícula en un material de espesor $\delta x$ como
+\begin{equation} \label{eq:prob}
+\frac{N_{tot}}{N_{inc}} = n\sigma\delta x,
+\end{equation}
+es decir que la sección eficaz es proporcional a la probabilidad de interacción del haz incidente con el blanco.
+El concepto de sección eficaz es fundamental y constituirá el valor principal para evaluar las posibles interacciones presentes en el detector. 
+Se puede, también, calcular la \emph{distancia media recorrida} por una partícula en un material de cualquier grosor $x$. Considerar $P(x)$ como la probabilidad de que una partícula no tenga interacción en una distancia $x$ de material y $w dx$ como la probabilidad de tener una interacción entre $x$ y $dx$. La probabilidad de no tener una interacción entre $x$ y $x+dx$ es
+\begin{align}
+P(x + dx)=&  P(x)(1-wdx),\nonumber \\ 
+P(x) + \frac{dP(x)}{dx}dx =&  P(x) - P(x)wdx,\nonumber\\ 
+dP(x) =&  -wP(x)dx, \nonumber
+\end{align} 
+resolviendo la ecuación diferencial anterior y requiriendo que $P(0) = 1$ se obtiene que 
+\begin{equation}
+P(x) = exp(-wx). \nonumber
+\end{equation} 
+Finalmente, es posible calcular la distancia media recorrida por una partícula en un material como
+\begin{equation}
+\lambda = \frac{\int xP(x)dx}{\int P(x) dx} = \frac{1}{w} = \frac{1}{N\sigma}, \nonumber
+\end{equation} 
+usando la ecuación \ref{eq:prob} y el hecho de que la probabilidad de interacción en un blanco delgado puede ser expandida como
+\begin{align}
+P_{int}(\delta x) &= 1 - exp(-wx),\nonumber\\ 
+&= 1-\bigg(1-\frac{\delta x}{\lambda} + ...\bigg),\nonumber\\ 
+&\simeq \frac{\delta x}{\lambda}. \nonumber
+\end{align} 
+La distancia media recorrida es un valor importante para evaluar y comprar diferentes materiales utilizados como productores de lluvia en un detector calorímetro.
+
+En la siguiente sección se analizarán las interacciones de partículas con la materia útiles para comprender el funcionamiento del detector preshower.
+\subsection{Interacción de partículas con la materia}
+Las partículas pueden interactuar de muchas maneras con la materia, muchas de estas interacciones están muy estudiadas y sus secciones eficaces son conocidas. En este trabajo nos concentraremos en las interacciones sufridas por fotones y electrones que pudiesen tener influencia en el funcionamiento y posterior reconstrucción del detector preshower. El detector preshower es un detector del tipo calorímetro que produce lluvias electromagnéticas (esto se procederá a explicar en mayor detalle más adelante), por lo que son las interacciones involucradas en esto las que interesaran en este trabajo.
+\subsubsection{Interacción de partículas con átomos}
+En este caso la partícula incidente interactúa directamente mediante colisiones con el átomo. Se pueden dar dos casos, una colisión con los electrones del átomo, de manera que el átomo queda ionizado y la partícula incidente pierde energía, o una colisión elástica con el núcleo del átomo, donde la partícula incidente cambia de dirección y pierde un poco de energía (despreciable). La perdida de energía por colisión con electrones es modelada por la fórmula \emph{Bethe-Bloch} mientras que las colisiones con los núcleos, en la que es mas probable que la partícula incidente cambie de dirección, es modelada por la fórmula de \emph{Rutherford}.
+\subsubsection{Interacción de electrones y positrones}
+Para electrones y positrones otra interacción del tipo electromagnética, conocida como radiación de frenado (o \emph{bremsstahlung}), afecta a la partícula incidente (además de las interacciones por colisión), por lo que la perdida energía total será
+\begin{equation}
+\frac{dE}{dx} = \bigg(\frac{dE}{dx}\bigg)_{col} + \bigg(\frac{dE}{dx}\bigg)_{rad}. \nonumber 
+\end{equation} 
+La radiación de frenado (o \emph{bremsstrahlung}) sucede en presencia de un campo eléctrico intenso. En este los electrones son frenados y emiten fotones, perdiendo energía. Es la principal causa de pérdida de energía a altas energía. El electron incidente con energía $E_i$ emite un fotón de energía $E_\gamma = E_i - E_f$ donde $E_f$ es la energía final del electrón. Es posible demostrar que la pérdida de energía por la radiación de frenado es linealmente proporcional con $E_i$. Además, a altas energías la sección eficaz de la radiación de frenado es casi constante y es posible definir la \emph{longitud de radiación} $X_0$ como 
+\begin{equation}
+\frac{1}{X_0} = n_\alpha \sigma_{rad}, \nonumber
+\end{equation} 
+donde $n_\alpha$ es el número de átomos por $cm^3$ en el material y $\sigma_{rad}$ la sección eficaz de la radiación de frenado. Es posible demostrar que 
+\begin{equation}
+E = E_0 e^{-x/X_0}, \nonumber
+\end{equation} 
+es decir, el valor $X_0$ representa la distancia media recorrida en la que el electrón ha disminuido a $1/e$ de su valor de energía inicial mediante el proceso de bremsstahlung. La longitud de radiación depende del material y será un valor importante a considerar al diseñar un detector.
+
+El positrón, al igual que el electrón, piede energía por ionización y radiación de frenado, sin embargo, a muy baja velocidad puede formar un \emph{positronio} con el electrón, un partícula muy parecida a un átomo de hidrógeno pero con estados menos espaciados. El positronio se aniquila con sección eficaz $\sigma_{an}$ produciendo dos fotones de $0.511 MeV$, 
+\begin{equation}
+e^+ + e^- \rightarrow \gamma + \gamma, \nonumber
+\end{equation} 
+aunque también se pueden producir tres gammas finales (dependiendo del estado del positronio).
+
+\subsubsection{Interacción de partículas gamma}
+Los fotones pueden interactuar de varias maneras con la materia, estas interacciones pueden producir partículas cargadas que permitirán identificar al fotón. Las interacciones de fotones con la materia pueden ser por efecto fotoeléctrico, efecto Compton, creación de pares, difusión Rayleigh con un electrón del material y absorción fotonuclear. Los dos últimos procesos son poco frecuentes en el rango de energía importante para este trabajo por lo que no se analizarán. 
+
+El efecto fotoeléctrico ocurre cuando un fotón es absorbido por un electrón del átomo, obteniendo este último la energía del fotón incidente, si esta energía supera la función de trabajo del material, el electrón es liberado del átomo. Los electrones liberados de esta manera son llamados fotoelectrones, para diferenciarlos de los electrones incidentes. La energía del electrón liberado es $E_e = E_\gamma - E_b$, donde $E_b$ es la función de trabajo y $E_\gamma$ es la energía del fotón que es igual a $E_\gamma = h\nu$.
+
+Por otro lado, el efecto de Compton se trata de una difusión elástica del fotón con un electrón que actúa como si estuviese libre, $\gamma + e^- \rightarrow \gamma + e^-$. El fotón sale en un ángulo $\theta$ y con una nueva longitud de onda $\lambda'$, dada por $\lambda' - \lambda = \frac{h}{mc}(1-\cos\theta)$. Un diagrama de la interacción se muestra en la Figura \ref{fig:compton}.
+
+\begin{figure}[t]
+\makebox[\textwidth][c]{\includegraphics[width=8cm]{figure/compton2.png}}
+%{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
+\caption[Colisión entre partículas y partículas secundarias producidas]{Diagrama del efecto compton entre un fotón y un electrón.\label{fig:compton}}
+\end{figure}
+
+
+La creación de pares, proceso mediante el cual un fotón produce un electrón y un positrón, $\gamma \rightarrow e^+ + e^-$, sucede en presencia de un campo eléctrico intenso. Para ocurrir es necesario que la energía del fotón cumpla que $E_\gamma \geq 1.022 MeV$. El ángulo de emisión del par $e^\pm$ respecto al fotón a alta energía sigue $\theta \sim \frac{mc^2}{E_\pm}$, por lo que a mayor energía menor el ángulo de emisión.
+
+A altas energías la creación de pares es el proceso dominante, con sección eficaz $\sigma_{par}$ constante. Al igual que para el electrón se puede introducir la longitud de conversión $X_c$ como
+\begin{equation}
+\frac{1}{X_c} = n_\alpha \sigma_{par} = \frac{1}{\frac{9}{7}X_0}, \nonumber
+\end{equation}
+y se cumple que la intensidad del haz de fotones se comporta en función de $X_c$ como
+\begin{equation}
+I = I_0 e^{-x/X_c}. \nonumber
+\end{equation}
+ En la Figura \ref{fig:cross_section} se muestran diferentes curvas de sección eficaz dada la energía del fotón incidente, para cada uno de los procesos analizados. La figura muestra secciones eficaces comunes que deben ser adaptadas dependiendo del material. En esta se observa claramente como la producción de pares predomina a altas energías, mientras que en la región de bajas energías el proceso predominante es el efecto fotoeléctrico.
+
+\begin{figure}[t]
+\makebox[\textwidth][c]{\includegraphics[width=14cm]{figure/crosssection_2.png}}
+%{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
+\caption[Colisión entre partículas y partículas secundarias producidas]{Sección eficaz para diversos procesos de un fotón.\label{fig:cross_section}}
+\end{figure}
+
+\section{Física de los detectores calorímetros}
+Si bien la física involucrada en el funcionamiento de los detectores es amplia y variada aquí nos concentraremos en los detectores del tipo calorímetro, que son el eje principal de este trabajo. En lo que sigue de esta sección se realizará una descripción de los procesos que ocurren en un detector calorímetro de manera general con la finalidad de entregar una base teórica para comprender las desiciones de diseño en la construcción del detector preshower. También, como ya se mencionó, un calorímetro puede ser del tipo homogéneo o heterogéneo (o de muestreo) según la disposición de sus partes o, además, del tipo electromagnético o hadrónicos según el tipo de partícula que detecten. Aquí nos concentraremos en los elementos constitutivos de un calorímetro del tipo electromagnético y su funcionamiento. 
+
+Un calorímetro se conforma de un material de producción de lluvias electromagnéticas y un material de lectura de estas lluvias. Para comprender mejor esto a continuación se describirán los procesos que originan las lluvias electromagnéticas.
+\subsection{Lluvias electromagnéticas}
+La generación de lluvias electromagnéticas es un proceso producido por el efecto combinado de la producción de pares y la emisión por radiación de frenado (o bremsstahlung). A altas energías un fotón se convierte en un par $e^+e^-$, estos a su vez emiten fotones mediante el proceso de radiación de frenado, estos fotones producen pares $e^+e^-$ y el proceso continua intercalando ambos procesos como se muestra en la Figura \ref{fig:shower}, hasta alcanzar la energía crítica. El proceso es descrito de manera aproximada por el modelo de Heitler.
+
+\begin{figure}[t]
+\makebox[\textwidth][c]{\includegraphics[width=8cm]{figure/em_shower.png}}
+%{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
+\caption[Colisión entre partículas y partículas secundarias producidas]{Diagrama de una lluvia electromagnética, descrita por el modelo Hetiler.\label{fig:shower}}
+\end{figure}
+
+En el modelo de Heitler, en promedio un fotón se convertirá en un par electrón-positron en una longitud de radiación $X_0$. Entonces un fotón de $E_0$ que entra en el calorímetro producirá alrededor de $2^t$ partículas al cabo de $t$ longitudes de radiación. Es decir
+\begin{equation}
+N(t) = 2^t, \nonumber
+\end{equation}
+además, dado a que en cada paso la energía de cada par será un medio de la partícula que lo produce, entonces 
+\begin{equation}
+E(t) = \frac{E_0}{2^t}, \nonumber
+\end{equation}
+o, trabajando esta ecuación, la energía media de las partículas a la profundidad $t$ será,
+\begin{equation}
+t(E') = \frac{\ln(E_0/E')}{\ln2}. \nonumber
+\end{equation}
+Como ya se mencionó, la lluvia se detiene al alcanzar la energía crítica $E_c$, en la que los pares $e^+e^-$ empiezan a perder su energía por colisiones atómicas en vez que por radiación de frenado. Asumiendo que la cascada (o lluvia) se detiene abruptamente a esta energía tenemos que el máximo número de partículas se alcanza a  
+\begin{equation}
+t_{max} = \frac{\ln(E_0/E_c)}{\ln 2}, \nonumber
+\end{equation}
+donde el número de partículas es,
+\begin{equation}
+N_{max} = e^{t_{max}\ln2} = E_0/E_c, \nonumber
+\end{equation}
+y la suma de recorrido de las partículas es,
+\begin{equation}
+L = X_0 \int^{t_{max}}_0 N(t) dt \approx X_0\frac{E_0/E_c}{\ln2}. \nonumber
+\end{equation}
+Es decir, midiendo $N_{max}$, $L$ o una cantidad proporcional es posible conocer el valor de energía inicial de la partícula incidente. Se debe notar eso si que el modelo es solo una aproximación simple de la lluvia, es posible obtener aproximaciones mas cercanas mediante métodos de Monte Carlo (es imposible obtener una forma analítica).
+
+El desarrollo longitudinal de la lluvia se puede cuantificar utilizando el radio de Moliere. A la profundidad máxima, el valor medio del ángulo de apertura de las partículas puede ser aproximado como
+\begin{equation}
+<\theta> = \frac{21.2 MeV}{E_c}, \nonumber
+\end{equation} 
+entonces, el radio de Moliere se define como	
+\begin{align}
+\rho_M &= <\theta>X_0 \nonumber\\
+&=  \frac{21.2 MeV}{E_c} X_0 \nonumber\\
+&= 7(g/cm^2)\frac{A}{Z},\nonumber
+\end{align} 
+que puede ser comprendido como la distancia transversal que una partícula en la energía crítica viaja al atravesar una longitud de radiación. Además, 
+el $90\%$ de la energía de la lluvia esta contenida en alrededor de un $\rho_M$. En al Figura \ref{fig:Moliere} se muestra como la distribución de la energía transversal integrada en la dirección longitudinal se desarrolla como función de la dirección en radios de Moliere desde la posición incidente de la partícula. 
+\begin{figure}[t]
+\makebox[\textwidth][c]{\includegraphics[width=8cm]{figure/Moliere.png}}
+%{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
+\caption{Desarrollo tranversal de la cascada electromagnética en función del número de radios de Moliere desde la posición incidente, para distintos materiales.\label{fig:Moliere}}
+\end{figure}
+Esta cantidad es muy importante en el diseño del calorímetro cuando la resolución espacial es un factor clave a considerar. Un menor radio de Moliere significa una mejor resolución espacial y por lo tanto una mejor capacidad para separar cascadas solapadas.
+\subsection{Materiales de construcción}
+Si bien, como ya se menciono, un calorímetro electromagnético puede estar construido de diferentes tipos de materiales (líquidos y sólidos, orgánicos e inorgánicos), en este trabajo nos concentraremos en la construcción de calorímetros homogéneos con cristales centelleadores inorgánicos (BGO, LYSO, LSO). Dos son los principales componentes de este tipo de calorímetros, el material centelleador y el sistema de lectura, que se procederan a describir a continuación.
+\subsection{Cristales centelleadores}
+Los cristales centelleadores son al mismo tiempo materiales activos (generadores de lluvias electromagnéticas) y sensibles (mediante la generación de luz por centelleo). Estos son capaces de generar luminiscencia al desexcitarse los átomos que son excitados por el paso de partículas cargadas. En específico, la captura de electrones por impurezas (o centros de activación) del cristal produce emisión de luz al desexcitarse. Existen dos tipos de emisión, la fluorescencia, de tipo muy rápido ($\tau \sim 10^{-8} seg.$) y la fosforescencia, que es muy lenta ($\tau_d \sim \mu s$). Para los detectores se prefieren materiales con tiempos de desexcitación muy rápidos. La respuesta del centelleador es lineal a la energía depositada y se busca una alta eficiencia, rápida respuesta, con transparencia a la radiación fluorescente y un espectro de emisión similar al de los fotomultiplicadores utilizados en la lectura. Un valor importante para medir la calidad de un centelleador es su respuesta luminosa. Esta se define como la energía necesaria para crear un fotón de centelleo, o 
+\begin{equation}
+\eta = \frac{\Delta E}{N_\gamma}. \nonumber
+\end{equation} 
+Este valor se puede entender como la eficiencia del detector para producir una señal medible.
+Esta eficiencia también es afectada por distintos procesos en el transporte de la luz, por ejemplo existe una atenuación en la propia luz de centelleo según la ley de atenuación $N(x) = N_0 e^{-\mu x}$ con $\mu$ el coeficiente de atenuación. 
+
+Los fotones producidos por el centelleador son comúnmente traspasados al fotomultiplicador que convierte los pulsos de luz en corriente eléctrica. La luz es trasladada al fotomultiplicador por guías de luz que pueden, a su vez, cambiar el rango de frecuencia de la luz emitida por el centelleador. Un diagrama se muestra en la Figura \ref{fig:centelleador}.
+
+\begin{figure}[t]
+\makebox[\textwidth][c]{\includegraphics[width=12cm]{figure/centelleador.png}}
+%{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
+\caption{Diagrama simple de un centelleador conectado a un fotomultiplicador.\label{fig:centelleador}}
+\end{figure}
+
+\subsection{Fotomultiplicadores}
+Los fotomultiplicadores son capaces de convertir pulsos de luz en pulsos de corriente eléctrica medibles. Se componen del fotocátado, dínodo y ánodo.
+El fotocátodo emite electrones en respuesta a los fotones incidentes mediante efecto fotoeléctrico. El material que lo compone debe ser un semiconductor con gran probabilidad de efecto fotoeléctrico. Comúnmente, los electrones producidos por el efecto fotoeléctrico se refieren como fotoelectrones $\gamma_e$. La eficiencia cuántica se puede definir como 
+\begin{equation}
+\eta(\lambda) = \frac{N_{\gamma_e}}{N_{\gamma_{inc}}}, \nonumber
+\end{equation} 
+donde $ N_{\gamma_e}$ y $N_{\gamma_{inc}}$ es el número de fotoelectrones producidos y el número de fotones incidentes respectivamente. Además, $\lambda$ es la longitud de onda de los fotones incidentes.
+
+Los dínodos son los encargados de multiplicar los fotoelectrones producidos en el cátodo. En estos, los fotoelectrones son acelerados en presencia de un campo eléctrico y dirigidos a los dínodos, dispuestos según la Figura \ref{fig:fotomultiplicador}, los que a su vez producen la emisión secundaría de más electrones. 
+
+El ánodo recoge la avalancha final de electrones producidos por los dínodos y produce un pulso eléctrico, normalmente un voltaje en función del tiempo $V(t)$.  La ganancia del fotomultiplicador se puede definir como la amplificación en la cadena de dínodos. Si cada dínodo produce $\delta$ electrones secundarios, entonces la ganancia será
+\begin{equation}
+G = \delta^n = (KV_d)^n, \nonumber
+\end{equation} 
+donde $V_d$ es el potencial entre dínodos y $n$ el número de dínodos. Se debe notar además que debido a que el funcionamiento de los centelleadores suele ser muy rápido, el fotomultiplicador también debe tener una resolución temporal muy alta.
+\begin{figure}[t]
+\makebox[\textwidth][c]{\includegraphics[width=15cm]{figure/fotomultiplicador.png}}
+%{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
+\caption{Fotomultiplicador en funcionamiento.\label{fig:fotomultiplicador}}
+\end{figure}
+
+Habiendo realizado un resumen muy general de los conceptos principales a tener en cuenta en el diseño de un calorímetro, en la próxima Sección presentaremos el calorímetro preshower, su estructura general y las bases de su funcionamiento. La próxima Sección constituirá una visión general del diseño del preshower, sólo lo necesario para comprender a cabalidad el algoritmo de reconstrucción propuesto para el detector preshower.
+

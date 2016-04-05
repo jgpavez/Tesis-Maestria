@@ -1,0 +1,275 @@
+% -------------------------------------------------------------------------------
+% Definiciones UTFSM Thesis : Hector Hidalgo Sepulveda, 2012
+% -------------------------------------------------------------------------------
+
+\documentclass[a4paper,12pt]{report}
+\usepackage{color}
+\definecolor{gray97}{gray}{.97}
+\definecolor{gray75}{gray}{.75}
+\definecolor{gray45}{gray}{.45}
+\definecolor{Gray}{cmyk}{0,0,0,0.50}
+\definecolor{SkyBlue}{cmyk}{0.62,0,0.12,0}
+\definecolor{RubineRed}{cmyk}{0,1,0.13,0}
+\definecolor{Orange}{cmyk}{0,0.61,0.87,0}
+\definecolor{DarkOrchid}{cmyk}{0.40,0.80,0.20,0}
+\definecolor{MidnightBlue}{cmyk}{0.98,0.13,0,0.43}
+\definecolor{RedViolet}{cmyk}{0.07,0.90,0,0.34}
+\definecolor{RawSienna}{cmyk}{0,0.72,1,0.45}
+
+\usepackage{graphicx}               % Para poder agregar imagenes al documento.
+\usepackage[english,spanish]{babel} % Para los idiomas que se usaran en el documento, permite el correcto corte de palabras (entre otras cosas en ls titulos)
+\usepackage[dvips]{epsfig}
+\usepackage[centertags]{amsmath}    % Permite alinear ecuaciones (muy util para varias ecuaciones)
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[Algoritmo]{algorithm}
+%\usepackage{algorithmic}
+%\usepackage[spanish,onelanguage]{algorithm2e}
+\usepackage[noend]{algpseudocode}
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+\usepackage{amsthm}
+%\usepackage{subfig}
+\usepackage{multirow}              % Para poder unir celdas en una tabla.
+\usepackage{url}                   % Sirve para que se habiliten las URL %
+\usepackage[unicode=true, pdfusetitle, bookmarks=true, bookmarksnumbered=false, bookmarksopen=false, breaklinks=true,pdfborder={0 0 0}, backref=false, colorlinks=false, pdfpagemode=FullScreen]{hyperref} % Sirve para que los links y navegacion en el pdf queden habilitados y ademas les da un estilo.
+\usepackage{newlfont}
+\usepackage{packages/UTFSM_Tesis}           % Paquete del DI para el formato de la Tesis
+\usepackage{packages/xtocinc}               % Include Table of Contents as the first entry in TOC
+\usepackage[inactive]{srcltx}      % SRC Specials for DVI search
+\usepackage{packages/slashbox} % Para hacer tablas con celdas separadas por una diagonal
+\usepackage{tikz}
+\usetikzlibrary{shadows,arrows,shapes}
+\usepackage{caption}
+\usepackage{subcaption}
+\bibliographystyle{ieeetr}
+
+% -----------------------------------------------------------------------------
+    
+
+
+
+\usepackage{appendix}
+\renewcommand{\appendixname}{Ap\'{e}ndices}
+\renewcommand{\appendixtocname}{Ap\'{e}ndices}
+\renewcommand{\appendixpagename}{Ap\'{e}ndices}
+
+% -----------------------------------------------------------------------------
+\usepackage{listings}              % para incluir codigo fuente (esto puede ser muuy personalizable)
+\usepackage{packages/lstcustom}
+\renewcommand\lstlistingname{Procedimiento}
+
+% -----------------------------------------------------------------------------
+% Otros paquetes necesarios, no anexados en UTFSM template
+\usepackage{array}
+\usepackage{varioref}
+\usepackage{float}
+\usepackage{textcomp}
+\usepackage{setspace}
+\usepackage[T1]{fontenc}
+% Para poder escribir con acentos sin tener que estar escribiendo codigos raros
+%\usepackage[utf8]{inputenc}
+\usepackage[applemac]{inputenc}
+\pagestyle{headings}
+\addto\shorthandsspanish{\spanishdeactivate{~<>}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\newenvironment{lyxcode}
+{\par\begin{list}{}{
+\setlength{\rightmargin}{\leftmargin}
+\setlength{\listparindent}{0pt}    % needed for AMS classes
+\raggedright
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\normalfont\ttfamily}%
+ \item[]}
+{\end{list}}
+
+% Fuzz -------------------------------------------------------------------
+\hfuzz2pt
+
+ \hyphenpenalty=5000
+ \tolerance=1000
+ \hyphenation{co-neccionistas}
+
+ \oddsidemargin  0cm                % Ancho Legal 21,59cm
+ \evensidemargin 0.5cm              % Alto  Legal 35,56cm
+ \textwidth      16.5cm
+ \topmargin      -1.5cm
+ \textheight     22cm
+
+ \newlength{\defbaselineskip}
+ \setlength{\defbaselineskip}{\baselineskip}
+
+ \newcommand{\setlinespacing}[1]    %
+           {\setlength{\baselineskip}{#1 \defbaselineskip}}
+
+%Formulas matem√°ticas utilizadas en el paper
+
+\newcommand{\bbbr}{\mathbb R}
+
+% THEOREMS ---------------------------------------------------------------
+\theoremstyle{plain}
+\newtheorem{thm}{Teorema}[section]
+\newtheorem{cor}[thm]{Corolario}
+\newtheorem{lem}[thm]{Lema}
+\newtheorem{prop}[thm]{Proposición}
+\theoremstyle{definition}
+\newtheorem{defn}{Definición}[section]
+\theoremstyle{remark}
+\newtheorem{rem}{Observación}[section]
+\numberwithin{equation}{section}
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+%%% ----------------------------------------------------------------------
+\setlength{\tclineskip}{1.05\baselineskip}
+%%% ----------------------------------------------------------------------
+
+%% TIKZ DIAGRAMS
+% Define the layers to draw the diagram
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+ 
+% Define block styles  
+\tikzstyle{materia}=[draw, fill=white!20, text width=8.0em, text centered,
+  minimum height=1.5em,]
+\tikzstyle{practica} = [materia, text width=11em, minimum width=12em,
+  minimum height=3em, rounded corners]
+\tikzstyle{texto} = [above, text width=6em, text centered]
+\tikzstyle{linepart} = [draw, thick, color=black!50, -latex', dashed]
+\tikzstyle{line} = [draw, thick, color=black!50, -latex']
+\tikzstyle{ur}=[draw, text centered, minimum height=0.01em]
+
+\tikzstyle{rombo}=[diamond, draw, fill=white!20, text width=6.0em, text centered,
+  minimum height=1.5em]
+\tikzstyle{decision} = [rombo, text width=7em, minimum width=8em,
+  minimum height=2em]
+  
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    text width=5em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,
+    minimum height=2em]
+ 
+% Define distances for bordering
+\newcommand{\blockdist}{1.3}
+\newcommand{\edgedist}{1.5}
+
+\newcommand{\practica}[2]{node (p#1) [practica]
+  {{\scriptsize #2}}}
+  
+  \newcommand{\decision}[2]{node (p#1) [decision]
+  {{\scriptsize #2}}}
+
+% Draw background
+\newcommand{\background}[5]{%
+  \begin{pgfonlayer}{background}
+    % Left-top corner of the background rectangle
+    \path (#1.west |- #2.north)+(-0.5,0.5) node (a1) {};
+    % Right-bottom corner of the background rectanle
+    \path (#3.east |- #4.south)+(+5.9,-0.25) node (a2) {};
+    % Draw the background
+    \path[fill=yellow!20,rounded corners, draw=black!50, dashed]
+      (a1) rectangle (a2);
+    \path (a1.east |- a1.south)+(0.8,-0.3) node (u1)[texto]
+      {\scriptsize\textit{Fase #5}};
+  \end{pgfonlayer}}
+
+\newcommand{\transreceptor}[3]{%
+  \path [linepart] (#1.east) -- node [above]
+    {\scriptsize Transreceptor #2} (#3);}
+    
+\newcommand{\lineaizq}[3]{%
+  \path [linepart] (#3) -- node [above]
+    {\scriptsize #2} (#1.west);}
+
+%\DeclareUnicodeCharacter{00A0}{ }
+
+\DeclareMathOperator{\plim}{plim}
+
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\begin{document}
+
+%\nobib
+%\draft
+%\nofront
+%\permissionfalse
+
+%\dedicate{	
+%...
+%}
+% \nolistoftables \nolistoffigures
+\magister
+
+\copyrightyear{2015} \submitdate{Noviembre 2015}
+\convocation{Noviembre}{2015}
+
+% ------------------------------------------------------------------------
+
+\title{Algoritmo de reconstrucci\'on para la identificaci\'on y segregaci\'on de part\'iculas de Altas Energ\'ias en un Detector Preshower.}
+
+\author{Juan Guillermo Pavez Sep\'ulveda}
+
+\twosupervisors
+\profguia{Dr. Héctor Allende O.}      % Profesor Tutor
+\profcorr{Dr. Carlos Valle.}        % Profesor Correferente
+\profext{Dr. Hayk Hakobyan.}         % Profesor Externo
+\prescom{Dr. Marcelo Mendoza R.}      % Presidente Comision
+
+%\include{dedication}
+\ack{0_Agradecimientos}          % Incluir Archivo con Agradecimientos
+\resumenesp{1_resumen/0.4_Resumen}           % Incluir Resumen
+\resumening{1_resumen/0.5_Abstract}          % Incluir Abstract
+%\abreviaciones{0.6_Abreviaciones}  % Incluir Abreviaciones
+ {
+\WinEdt{?0000} % Don't bother with over/under-full boxes
+\beforepreface
+\WinEdt{?1111} % Process All Errors from Here on
+}
+
+% ------------------------------------------------------------------------
+\afterpreface
+
+% ------------------------------------------------------------------------
+% Se agregan los diferentes capitulos de la Tesis
+% ------------------------------------------------------------------------
+    \include{Apendice_Abreviaciones}
+    \include{2_introduccion/1_Introduccion}
+    \include{3_conceptos-fisica/2_ConceptosFisica}
+    \include{4_detector-preshower/4_DetectorPreshower}
+    \include{5_estado_del_arte/5_EstadoDelArte}
+    \include{6_algoritmo_reconstruccion/6_AlgoritmoReconstruccion}
+    \include{7_experimentos/7_Experimentos}
+    \include{8_conclusion/8_Conclusion}
+    %\include{5_experimentos/4_Experimentos}
+    %\include{6_conclusion/5_Conclusion}
+
+    \clearpage % o \cleardoublepage
+    \addappheadtotoc
+    \appendixpage
+    \appendix
+    %\include{7_apendices/metodos_optimizacion}
+    %\include{7_apendices/distribuciones}
+    %\include{7_apendices/resultados_extras}
+
+% ------------------------------------------------------------------------
+% Se agrega la Bibliograf√≠a: Ojo, compilar con Latex y luego con Bibtex (2 veces)
+% ------------------------------------------------------------------------
+    \singlespacing
+    \bibliographystyle{plain}
+    \bibliography{8_bibliografia/bibliografia}
+
+\end{document}
+% ------------------------------------------------------------------------
