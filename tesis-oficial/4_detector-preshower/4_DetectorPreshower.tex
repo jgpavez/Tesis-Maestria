@@ -1,0 +1,34 @@
+\chapter{Detector Preshower \label{detector}}
+En esta Sección se procederá a describir, de manera general, el diseño y funcionamiento del detector preshower. Como ya se mencionó, la finalidad del detector preshower es detectar partículas (neutras y cargadas) muy cercanas entre sí, por lo que el diseño esta pensado en pos de esta finalidad. Un primer acercamiento por parte del equipo experimental de física nuclear y de altas energías de la UTFSM corresponde a un prototipo simple para probar el funcionamiento del detector antes de entrar en una fase de producción.
+Primero, se presentará el diseño general del prototipo para luego explicar las bases de su funcionamiento.
+
+\section{Diseño}
+El detector preshower es un detector calorímetro electromagnético del tipo homogéneo. Como se describió en la Sección 2, un detector calorímetro se conforma principalmente de un material de producción de lluvias (pueden ser cristales orgánicos e inorgánicos, líquido, gas, etcétera) y un sistema de amplificación y lectura de las señales producidas (por ejemplo un sistema de fotomultiplicadores).
+En el prototipo de preshower estas dos secciones principales son la matriz de cristales que producen las lluvias electromagnéticas y el sistema de lectura que convierte esta lluvia en una señal medible. Un esquema a alto nivel del diseño del detector se observa en le Figura~\ref{fig:preshower}.
+
+\begin{figure}[t]
+\makebox[\textwidth][c]{\includegraphics[width=15cm]{figure/preshower_proto_2.png}}
+%{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
+\caption{Prototipo de preshower, en este se pude observar la matriz de cristales (de color azul), el sistema de lectura y el material de cobertura.\label{fig:preshower}}
+\end{figure}
+
+
+\subsection{Matriz de cristales}
+La matriz de cristales se conforma de 25x25 (625 en total) cristales centelleadores del tipo LYSO ($Lu_{1.8}Y_{0.2}SiO_5$). Como fue descrito en la Sección previa, los materiales centelleadores son capaces de producir luz mediante el proceso de luminiscencia, cuando partículas cargadas interactúan con el material. Los cristales LYSO ofrecen ciertas características que lo hacen una muy buena elección para la construcción del preshower, estos presentan un tipo de luminiscencia muy veloz e intensa, lo que permite reducir los tamaños del calorímetro y al mismo tiempo producir una señal medible por el sistema de lectura. Otros materiales comúnmente utilizados como cristales centelleadores son BGO ($Bi_4 Ge_3 O_{12}$) y PWO ($PbWO_4$). Valores característicos de cada uno de estos materiales se muestran en la Tabla \ref{table:materiales}, que muestra claramente la superioridad en luminosidad (fotones producidos por energía incidente) de los cristales LYSO sobre las otras opciones. 
+
+Otro valor importante a considerar es la longitud de atenuación del cristal. Si bien el fabricante del cristal reporta un valor de $\lambda$ de $12[mm]$, otros estudios reportan valores muchos mayores [ESTUDIOS]. Recordar que la longitud de atenuación se relaciona con la probabilidad de absorber o no una partícula en el material, por lo que mayores longitudes de radiación implicarán cristales de mayor tamaño con la finalidad de aumentar la probabilidad de interacción con los cristales (de otra forma las partículas pueden pasar sin interactuar y por lo tanto sin ser detectadas). Las probabilidades de interacción de una partícula gamma entregadas por el fabricante, dependiendo de la energía y para varios largos del cristal, se muestran en la Figura \ref{fig:absorcion}. Para un largo de $45[mm]$ y un fotón de $511[keV]$ la probabilidad de absorción es aproximadamente $95\%$, bajando a un largo de $4[mm]$ la probabilidad disminuye a un valor cercano a $4\%$. Esto demuestra la importancia de conocer correctamente la longitud de atenuación con la finalidad de seleccionar correctamente el tamaño del cristal usado. Experimentos por parte del grupo de física experimental del centro CCTVAL han medido una longitud de atenuación de $1043\pm61[mm]$ mediante experimentos que miden el cambio en la posición del peak de energía medido por el lector (MPPC) dada la distancia de la partícula incidente a este [TESIS ESTEBAN]. 
+
+\begin{figure}[t]
+\makebox[\textwidth][c]{\includegraphics[width=15cm]{figure/absortion_lyso.png}}
+%{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
+\caption{Porcentaje de absorción dada la energía para diversos largos de cristal LYSO. \label{fig:absorcion}}
+\end{figure}
+
+
+Finalmente, se utilizan cristales de tamaño 4x4x45 [mm$^3$], lo que (según las especificaciones del fabricante) supone un diseño de 4 longitudes de absorción. 
+
+Es importante aislar ópticamente los cristales para evitar la salida de luz de cada cristal. La luz viaja en el cristal confinada por el material reflectante hasta alcanzar los extremos del cristal donde es absorbida y re-emitida por fibras ópticas. Además, experimentos han demostrado que es posible optimizar la longitud de atenuación con diferentes materiales reflectantes [EXPERIMENTOS WILL]. Los experimentos realizados para seleccionar el material reflectante se pueden encontrar en [TESIS ESTEBAN].
+
+\subsection{Sistema de lectura}
+
+

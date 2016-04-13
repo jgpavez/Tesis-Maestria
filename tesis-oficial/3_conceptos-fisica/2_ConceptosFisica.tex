@@ -48,7 +48,12 @@ P_{int}(\delta x) &= 1 - exp(-wx),\nonumber\\
 &= 1-\bigg(1-\frac{\delta x}{\lambda} + ...\bigg),\nonumber\\ 
 &\simeq \frac{\delta x}{\lambda}. \nonumber
 \end{align} 
-La distancia media recorrida es un valor importante para evaluar y comprar diferentes materiales utilizados como productores de lluvia en un detector calorímetro.
+Entonces, la probabilidad de supervivencia queda como
+\begin{equation}
+P(x) = e^{\big(\frac{-x}{\lambda}\big)}. \nonumber
+\end{equation}
+El valor $\lambda$ también se conoce como longitud de atenuación y se puede entender como la distancia a la cual la probabilidad de que la partícula no sea absorbida cae en $1/e$.
+La longitud de atenuación es un valor importante para evaluar y comprar diferentes materiales utilizados como productores de lluvia en un detector calorímetro.
 
 En la siguiente sección se analizarán las interacciones de partículas con la materia útiles para comprender el funcionamiento del detector preshower.
 \subsection{Interacción de partículas con la materia}
@@ -92,7 +97,7 @@ Por otro lado, el efecto de Compton se trata de una difusión elástica del fotón 
 
 La creación de pares, proceso mediante el cual un fotón produce un electrón y un positrón, $\gamma \rightarrow e^+ + e^-$, sucede en presencia de un campo eléctrico intenso. Para ocurrir es necesario que la energía del fotón cumpla que $E_\gamma \geq 1.022 MeV$. El ángulo de emisión del par $e^\pm$ respecto al fotón a alta energía sigue $\theta \sim \frac{mc^2}{E_\pm}$, por lo que a mayor energía menor el ángulo de emisión.
 
-A altas energías la creación de pares es el proceso dominante, con sección eficaz $\sigma_{par}$ constante. Al igual que para el electrón se puede introducir la longitud de conversión $X_c$ como
+A altas energías la creación de pares es el proceso dominante, con sección eficaz $\sigma_{par}$ constante. Al igual que para el electrón se puede introducir la longitud de conversión (atenuación) $X_c$ como
 \begin{equation}
 \frac{1}{X_c} = n_\alpha \sigma_{par} = \frac{1}{\frac{9}{7}X_0}, \nonumber
 \end{equation}
@@ -100,12 +105,12 @@ y se cumple que la intensidad del haz de fotones se comporta en función de $X_c$
 \begin{equation}
 I = I_0 e^{-x/X_c}. \nonumber
 \end{equation}
- En la Figura \ref{fig:cross_section} se muestran diferentes curvas de sección eficaz dada la energía del fotón incidente, para cada uno de los procesos analizados. La figura muestra secciones eficaces comunes que deben ser adaptadas dependiendo del material. En esta se observa claramente como la producción de pares predomina a altas energías, mientras que en la región de bajas energías el proceso predominante es el efecto fotoeléctrico.
+ En la Figura \ref{fig:cross_section} se muestran diferentes longitudes de atenuación dada la energía del fotón incidente, para cada uno de los procesos analizados. La figura muestra longitudes de atenuación comunes que deben ser adaptadas dependiendo del material. En esta se observa claramente como la producción de pares predomina a altas energías, mientras que en la región de bajas energías el proceso predominante es el efecto fotoeléctrico.
 
 \begin{figure}[t]
 \makebox[\textwidth][c]{\includegraphics[width=14cm]{figure/crosssection_2.png}}
 %{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
-\caption[Colisión entre partículas y partículas secundarias producidas]{Sección eficaz para diversos procesos de un fotón.\label{fig:cross_section}}
+\caption[Colisión entre partículas y partículas secundarias producidas]{Longitud de atenuación para diversos procesos de un fotón.\label{fig:cross_section}}
 \end{figure}
 
 \section{Física de los detectores calorímetros}
