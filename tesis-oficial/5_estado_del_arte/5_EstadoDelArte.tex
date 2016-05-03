@@ -1,0 +1,76 @@
+\chapter{Estado del Arte \label{estado}}
+Un algoritmo de reconstrucci—n se compone de varios sub-procesos, que en conjunto permiten reconstruir la energ’a y posici—n de una o m‡s part’culas detectadas. Si bien existen varias posibilidades en el proceso de reconstrucci—n, tales como la reconstrucci—n del ‡ngulo de incidencia, la reconstrucci—n de trayectoria~\cite{speer2006track}, las principales tareas que interesan en este trabajo son: el agrupamiento de los datos, la identificaci—n de m‡ximos en los clusters, la identificaci—n y separaci—n (cuando es posible) de part’culas solapadas y la reconstrucci—n de la posici—n y energ’a de cada una de estas part’culas.\\
+A continuaci—n se analizar‡n cada una de estas tareas por separado.
+\section {Clustering de part’culas}
+La entrada al algoritmo es la medici—n de cada uno de los lectores del sistema. La estructura de esta entrada depende de la configuraci—n del sistema de lectura, este puede ser capaz de medir la energ’a (o fotoelectrones) depositada en cada celda o s—lo medir una proyecci—n en cada eje de la energ’a depositada (como en el caso del preshower). La entrada depende del sistema de lectura, pero comœnmente corresponde a un conjunto de valores de energ’a o fotoelectrones que deben ser agrupados de manera de representar part’culas incidentes. Las part’culas incidentes usualmente depositan su energ’a en varias celdas o cristales del calor’metro. La finalidad de los algoritmos presentados aqu’ es agrupar estas celdas. El algoritmo debe tambiŽn eliminar posibles fuentes de ruido en las lecturas en caso de ser posible. El ruido en los calor’metros viene de dos fuentes principales. Primero, ruido es introducido por distintos procesos en la electr—nica de lectura. Segundo, existe ruido conocido como de apilamiento (\emph{pile-up}). Este tipo de ruido proviene de interacciones extras que ocurren al mismo tiempo que la part’cula atraviesa el detector.
+
+Varios mŽtodos han sido propuestos en la literatura para formar los clusters en calor’metros basados en cristales. Entre los algoritmos propuestos se pueden encontrar mŽtodos de construcci—n incremental de los clusters que funcionan muy bien en la pr‡ctica, tambiŽn es posible encontrar algoritmos m‡s avanzados que utilizan mŽtodos probabil’sticos para construir los clusters. 
+
+En lo que continua analizaremos algunos de los algoritmos m‡s utilizados en el trabajo de clustering en detectores con geometr’as relativamente similar al detector preshower. 
+
+\subsection{Ventana deslizante}
+Este algoritmo es propuesto por el experimento ATLAS y es utilizado en el proceso de reconstrucci—n del calor’metro electromagnŽtico y el calor’metro hadr—nico~\cite{lampl2008calorimeter}. Los clusters pueden utilizar informaci—n combinada de ambos calor’metros, esto es œtil para reconstruir jets e identificaci—n de leptones Tau o utilizar solo la informaci—n del calor’metro electromagnŽtico, œtil para la reconstrucci—n de electrones y fotones.  
+
+El detector calor’metro en atlas se compone tanto de secciones longitudinales como secciones transversales, las secciones longitudinales se extienden en el espacio $\eta - \sigma$, y existen cuatro secciones transversales en el caso del calor’metro electromagnŽtico: \emph{middle}, \emph{strips}, \emph{pre-sampler} y \emph{back}.
+
+El algoritmo se compone de tres pasos principales: construcci—n de torres, bœsqueda de pre-clusters y llenado de clusters. 
+
+\subsubsection{Construcci—n de torres}
+El espacio longitudinal $\eta-\sigma$ es segmentado en $N_{\eta}\times N_{\phi}$ celdas de tama–o $\Delta \eta \times \Delta \phi$ formando torres transversales de celdas donde la energ’a depositada es sumada. Los valores $N_{\eta}$ y $N_{\phi}$ son definidos como par‡metros del algoritmo y deben ser seleccionados de antemano. Si existen celdas que corresponden a m‡s de una torre, entonces la energ’a de las celdas es repartida en en proporci—n al ‡rea de la celda en cada torre.
+
+\subsubsection{Bœsqueda de pre-clusters}
+ Se define una ventana de tama–o fijo $N^{window}_{\eta} \times N^{window}_{\phi}$ en unidades del tama–o de torre $\Delta \eta \times \Delta \phi$. La ventana es movida a lo largo de las torres construidas y pre-clusters son formados en los m‡ximos locales de energ’a acumulada en la torre (definida como la suma de energ’as en todas las celdas que forman parte de la torre) que, adem‡s, superen un umbral $E_T^{thresh}$.
+ 
+ La posici—n en el eje $\eta-\phi$ de los pre-clusters obtenidos en este paso es calculada utilizando el centro de masa con pesos iguales a la energ’a en cada una de las celdas incluidas en las torres. Es posible tambiŽn definir tama–os menores para las ventanas utilizadas al calcular la posici—n, es decir utilizar $N^{pos}_{\eta} \times N^{pos}_{\phi}$, esto con la finalidad de minimizar el ruido introducido en el calculo de posici—n.
+ 
+ Finalmente, este paso termina removiendo los clusters duplicados. Estos se definen como dos pre-clusters que tengan posiciones centrales dentro de $\Delta \eta_{dupl} \times \Delta \phi_{dupl}$. S—lo el pre-clusters con mayor cantidad de energ’a integrada es conservado.
+ 
+\subsubsection{Llenado de clusters}
+
+En el caso de estar trabajando en la formaci—n de clusters combinados con informaci—n conjunta del calor’metro hadr—nico y electromagnŽtico, los cluster corresponden a los pre-clusters formados en el paso anterior. Para el caso de la construcci—n de clusters electromagnŽticos, se definen diferentes tama–os de clusters para cada una de las capas del calor’metro, esto debido a que el campo electromagnŽtico en el detector afecta de manera diferente a las part’culas que pasan por el calor’metro en diferentes capas de este. Los nuevos cluster son construidos bas‡ndose en las posiciones calculadas para los pre-clusters. Adem‡s se pueden definir clusters de distintos tama–os dependiendo de la part’cula hipotetizada. Nose ahondar‡ mucho en esto œltimo debido a que es muy espec’fico al funcionamiento del detector calor’metro de ATLAS.
+
+Este algoritmo es utilizado en el detector atlas para la reconstrucci—n de electrones y fotones~\cite{aad2012electron,atlas4calorimeter} y la reconstrucci—n de leptones Tau~\cite{kalinowski2009tau} (aunque en versiones actuales del algoritmo esto se cambi— a clustering topol—gico).
+
+
+%El algoritmo de ventana deslizante que se basa en sumar la energ\'ia (n\'otese que no necesariamente se trata de energ\'ia, puede ser conteo de foto-electrones u otra medida, de aqu\'i en adelante se utilizar\'a energ\'ia para simplificar la explicaci\'on) en celdas dentro de un rect\'angulo de tama\~no fijo. La posici\'on central del rect\'angulo es seleccionada de manera de maximizar la cantidad de energ\'ia contenida. Este algoritmo es utilizado en el detector ATLAS para la reconstrucci\'on de lluvias electromagn\'eticas~\cite{lampl2008calorimeter}~\cite{atlas4calorimeter}.
+
+\subsection{Cluster topol—gico}
+
+Otro mŽtodo de clustering utilizado en el experimento ATLAS es el cluster topol—gico~\cite{lampl2008calorimeter,atlas2016topological}. Este algoritmo permite construir clusters de tama–o variable, a diferencia del algoritmo anterior con el que s—lo se pod’an construir clusters de tama–o fijo. El algoritmo consiste de tres pasos principales: bœsqueda de semillas, bœsqueda de vecinos, construcci—n de clusters.
+\subsubsection{Bœsqueda de semillas}
+El algoritmo comienza con la bœsqueda de semillas para construir los clusters. Se identifican las celdas con un valor se–al a ruido mayor a un umbral $t_{seed}$ definido de antemano. El valor de se–al se define como el valor absoluto de la energ’a en la celda y otro valor equivalente, mientras que el ruido corresponde al valor esperado del ruido en base a consideraciones electr—nicas y f’sicas. Cada celda seleccionada en este paso corresponde a un proto-cluster.
+\subsubsection{Bœsqueda de vecinos}
+La lista de semillas es ordenada en orden descendente bas‡ndose en el valor de la raz—n se–al a ruido. Entonces, por cada semilla en orden se consideran las celdas vecinas que superen un umbral $t_{cell}$. Si el vecino no esta en la lista de utilizados y supera el umbral entonces es agregado a un proto-cluster correspondiente a la semilla. Si la celda es adyacente tambiŽn a otro proto-cluster entonces ambos son combinados. Si la celda agregada adem‡s supera un umbral $t_{neighbor}$ entonces la celda es utilizada como semilla para expandir el cluster. Esto asegura que las colas de las lluvias electromagnŽticas no sean descartadas pero al mismo tiempo asegura que no se agregue ruido electr—nico y de apilamiento. El proceso continua hasta procesar todas las semillas de la lista original, continuando luego con las semillas agregadas por los vecinos en el paso anterior. Esto continua hasta que no quedan m‡s semillas. 
+\subsubsection{Construcci—n de clusters}
+Como paso final, los proto-clusters que quedan del paso anterior (algunos fueron combinados) son ordenados de mayor a menor (respecto a la energ’a u otro valor equivalente) y convertidos en clusters. Adicionalmente se pueden eliminar los que tengan energ’a total $E_t$ menor a un umbral $t_E$, con la finalidad de evitar clusters construidos de ruido.
+
+Notar que es posible que los clusters obtenidos con el algoritmo de clustering topol—gico correspondan a m‡s de una part’cula incidente, debido al solapamiento de lluvias (para el clustering por ventana deslizante se asume que cada cluster de tama–o fijo corresponde a s—lo una lluvia). Por lo anterior, es necesario agregar un paso de divisi—n de clusters, esto se tratar‡ en la secci—n~\ref{solapamiento}. 
+
+El algoritmo de cluster topol—gico ha sido utilizado extendidamente en la reconstrucci—n de jets y MTE (\emph{missing transverse momentum}) en los calor’metros electromagnŽtico y hadr—nico de ATLAS~\cite{pinfold2012evaluation,barillari2008local,cojocaru2004hadronic}, mostrando una gran eficiencia en la reconstrucci—n~\cite{atlas2016topological}.
+
+\subsection{Fuzzy c-means}
+Otro mŽtodo exitosamente aplicado en la literatura es el algoritmo de clustering fuzzy c-means. K-means es una muy popular tŽcnica de clustering que aprende de manera no supervisada a encontrar K clusters en los datos. Su uso es muy extendido en la miner’a de datos y se extiende por las mas variadas disciplinas. Para el trabajo de reconstrucci—n de part’culas en detectores calor’metros, esta tŽcnica (y en general cualquier tŽcnica de clustering duro) no es adecuada ya que asigna cada dato a un s—lo cluster, lo que no permite lluvias solapadas, que como ya se vio son muy comunes. Los mŽtodos fuzzy, en cambio, permiten que cada punto pertenezca en menor o mayor grado a diferentes clusters. Estos mŽtodos combinan los algoritmos de clustering b‡sicos con la teor’a fuzzy [FUZZY] que permite agregar conceptos de imprecisi—n e incerteza a los mŽtodos duros. El algoritmo fuzzy c-means, en espec’fico, es una versi—n fuzzy del algoritmo K-means. Existen estudios de la aplicaci—n de este algoritmo para reconstrucci—n de part’culas en calor’metros~\cite{FUZZY,PRESHOWER}, sin embargo, al conocimiento de este autor no hay aplicaciones reales (en detectores) de este algoritmo.
+
+En ~\cite{FUZZY} el algoritmo fuzzy c-means y una extensi—n de este, el algoritmo dynamic fuzzy c-means, es aplicado para la reconstrucci—n en datos simulados de un detector calor’metro de muestreo. En este trabajo se demuestra la utilidad de los algoritmos fuzzy en la tarea de reconstrucci—n debido a la capacidad de estos mŽtodos de manejar las lluvias solapadas autom‡ticamente. 
+
+Fuzzy c-means comienza con un conjunto de datos $X = (x_1, x_2, ..., x_N)$ con $x_i \in \mathbb{R}^d$, para estos datos busca el conjunto de clusters con centros $V = (v_1, v_2, ..., v_C)$ con $v_i \in \mathbb{R}^d$ que minimicen la funci—n de costo 
+\begin{equation}
+J_m (U,V;X) = \sum_{k=1}^N \sum_{i=1}^C (u_{ik})^m||x_k - v_i||^2, \nonumber
+\end{equation}
+donde $U$ consiste de los valores $u_{ik}$ que corresponden a los grados de pertenencia de el punto $k$ al cluster $i$, $||x|| = \sqrt{x^Tx}$ es la norma de producto interno y el valor $m\in[1,\infty[$ (factor fuzzy) define el grado de fucificaci—n del algoritmo, donde $m$ cercano a $1$ corresponde a un simple k-means. Imponiendo restricciones 
+\begin{align}
+\sum_{k=1}^N u_{ik} > 0, i \in \{1,...,C\} \nonumber \\
+\sum_{i=1}^C u_{ik} = 1, k \in \{1,...,N\}. \nonumber
+\end{align}	
+Es posible resolver el problema iterando el siguiente algoritmo
+\begin{equation}
+u_{ik} = \bigg[\sum_{j=1}^C\bigg(\frac{D_{ik}}{D_{jk}}\bigg)^{\frac{2}{m-1}}\bigg]^{-1}, \nonumber
+\end{equation}
+con $D_{ik} = ||x_k - v_i|| > 0$ para todo $i$ y $k$. Y
+\begin{equation}
+v_i = \frac{\sum_{k=1}^n(u_{ik})^m x_k}{\sum_{k=1}^n(u_{ik})^m}. \nonumber
+\end{equation}
+El algoritmo procede alternando las estimaciones de $V$ y $U$ hasta alcanzar un nœmero definido de iteraciones o alcanzar un umbral de error $\epsilon$ definido de ante mano.
+
+
+

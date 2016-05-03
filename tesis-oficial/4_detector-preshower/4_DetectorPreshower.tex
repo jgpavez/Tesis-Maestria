@@ -1,22 +1,35 @@
 \chapter{Detector Preshower \label{detector}}
 En esta Sección se procederá a describir, de manera general, el diseño y funcionamiento del detector preshower. Como ya se mencionó, la finalidad del detector preshower es detectar partículas (neutras y cargadas) muy cercanas entre sí, por lo que el diseño esta pensado en pos de esta finalidad. Un primer acercamiento por parte del equipo experimental de física nuclear y de altas energías de la UTFSM corresponde a un prototipo simple para probar el funcionamiento del detector antes de entrar en una fase de producción.
-Primero, se presentará el diseño general del prototipo para luego explicar las bases de su funcionamiento.
+A continuación, se presentará el diseño general del prototipo de preshower y su funcionamiento.
 
 \section{Diseño}
 El detector preshower es un detector calorímetro electromagnético del tipo homogéneo. Como se describió en la Sección 2, un detector calorímetro se conforma principalmente de un material de producción de lluvias (pueden ser cristales orgánicos e inorgánicos, líquido, gas, etcétera) y un sistema de amplificación y lectura de las señales producidas (por ejemplo un sistema de fotomultiplicadores).
-En el prototipo de preshower estas dos secciones principales son la matriz de cristales que producen las lluvias electromagnéticas y el sistema de lectura que convierte esta lluvia en una señal medible. Un esquema a alto nivel del diseño del detector se observa en le Figura~\ref{fig:preshower}.
+En el prototipo de preshower estas dos secciones principales son la matriz de cristales, que producen las lluvias electromagnéticas y el sistema de lectura que convierte esta lluvia en una señal medible. Un esquema a alto nivel del diseño del detector se observa en le Figura~\ref{fig:preshower}.
 
 \begin{figure}[t]
 \makebox[\textwidth][c]{\includegraphics[width=15cm]{figure/preshower_proto_2.png}}
 %{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
-\caption{Prototipo de preshower, en este se pude observar la matriz de cristales (de color azul), el sistema de lectura y el material de cobertura.\label{fig:preshower}}
+\caption{Prototipo de preshower, en este se puede observar la matriz de cristales (de color azul), el sistema de lectura y el material de cobertura.\label{fig:preshower}}
 \end{figure}
 
 
 \subsection{Matriz de cristales}
-La matriz de cristales se conforma de 25x25 (625 en total) cristales centelleadores del tipo LYSO ($Lu_{1.8}Y_{0.2}SiO_5$). Como fue descrito en la Sección previa, los materiales centelleadores son capaces de producir luz mediante el proceso de luminiscencia, cuando partículas cargadas interactúan con el material. Los cristales LYSO ofrecen ciertas características que lo hacen una muy buena elección para la construcción del preshower, estos presentan un tipo de luminiscencia muy veloz e intensa, lo que permite reducir los tamaños del calorímetro y al mismo tiempo producir una señal medible por el sistema de lectura. Otros materiales comúnmente utilizados como cristales centelleadores son BGO ($Bi_4 Ge_3 O_{12}$) y PWO ($PbWO_4$). Valores característicos de cada uno de estos materiales se muestran en la Tabla \ref{table:materiales}, que muestra claramente la superioridad en luminosidad (fotones producidos por energía incidente) de los cristales LYSO sobre las otras opciones. 
+La matriz de cristales se conforma de 25x25 (625 en total) cristales centelleadores del tipo LYSO ($Lu_{1.8}Y_{0.2}SiO_5$). Como fue descrito en la Sección previa, los materiales centelleadores son capaces de producir luz mediante el proceso de luminiscencia, cuando partículas cargadas interactúan con el material. Los cristales LYSO ofrecen ciertas características que los hacen una muy buena elección para la construcción del preshower, estos presentan un tipo de luminiscencia muy veloz e intensa, lo que permite reducir los tamaños del calorímetro y al mismo tiempo producir una señal medible por el sistema de lectura. Otros materiales comúnmente utilizados como cristales centelleadores son BGO ($Bi_4 Ge_3 O_{12}$) y PWO ($PbWO_4$). Valores característicos de cada uno de estos materiales se muestran en el Cuadro \ref{tab:materiales}, donde se observa claramente la superioridad en luminosidad (fotones producidos por energía incidente) de los cristales LYSO sobre las otras opciones. 
 
-Otro valor importante a considerar es la longitud de atenuación del cristal. Si bien el fabricante del cristal reporta un valor de $\lambda$ de $12[mm]$, otros estudios reportan valores muchos mayores [ESTUDIOS]. Recordar que la longitud de atenuación se relaciona con la probabilidad de absorber o no una partícula en el material, por lo que mayores longitudes de radiación implicarán cristales de mayor tamaño con la finalidad de aumentar la probabilidad de interacción con los cristales (de otra forma las partículas pueden pasar sin interactuar y por lo tanto sin ser detectadas). Las probabilidades de interacción de una partícula gamma entregadas por el fabricante, dependiendo de la energía y para varios largos del cristal, se muestran en la Figura \ref{fig:absorcion}. Para un largo de $45[mm]$ y un fotón de $511[keV]$ la probabilidad de absorción es aproximadamente $95\%$, bajando a un largo de $4[mm]$ la probabilidad disminuye a un valor cercano a $4\%$. Esto demuestra la importancia de conocer correctamente la longitud de atenuación con la finalidad de seleccionar correctamente el tamaño del cristal usado. Experimentos por parte del grupo de física experimental del centro CCTVAL han medido una longitud de atenuación de $1043\pm61[mm]$ mediante experimentos que miden el cambio en la posición del peak de energía medido por el lector (MPPC) dada la distancia de la partícula incidente a este [TESIS ESTEBAN]. 
+\begin{table}[h]
+\centering
+\begin{tabular}{|p{2cm}|p{2cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
+\hline
+     Material & Desidad\newline [$gr/cm^3$] & Luminosidad\newline [$ph/MeV$] & Radio\newline Moliere [cm] & Longitud\newline atenuación [cm] \\ \hline
+     BGO & 7,13 & 8.200   & 2,23  & 1,20   \\
+     PWO & 8,2  &  200     & 2,00  &  0,89   \\
+     LYSO & 7,1 &  32.000& 2,07  &  1,14  \\ \hline
+
+\end{tabular}
+\caption{Algunos valores para varios tipos de materiales centelleadores. \label{tab:materiales}}
+\end{table}
+
+Otro valor importante a considerar es la longitud de atenuación del cristal. Si bien el fabricante del cristal reporta un valor de $\lambda$ de $12[mm]$, otros estudios reportan valores muchos mayores~\cite{ax-pet,pet}. Recordar que la longitud de atenuación se relaciona con la probabilidad de absorber o no una partícula en el material, por lo que mayores longitudes de radiación implicarán cristales de mayor tamaño con la finalidad de aumentar la probabilidad de interacción con los cristales (de otra forma las partículas pueden pasar sin interactuar y por lo tanto sin ser detectadas). Las probabilidades de interacción de una partícula gamma entregadas por el fabricante, dependiendo de la energía y para varios largos del cristal, se muestran en la Figura \ref{fig:absorcion}. Para un largo de $45[mm]$ y un fotón de $511[keV]$ la probabilidad de absorción es aproximadamente $95\%$, mientras que bajando a un largo de $4[mm]$ la probabilidad disminuye a un valor cercano a $4\%$. Esto demuestra la importancia de conocer correctamente la longitud de atenuación con la finalidad de seleccionar correctamente el tamaño del cristal usado. Experimentos por parte del grupo de física experimental del centro CCTVAL han medido una longitud de atenuación de $1043\pm61[mm]$ mediante experimentos que miden el cambio en la posición del peak de energía medido por el lector (MPPC) dada la distancia de la partícula incidente a este ~\cite{tesis-esteban}. 
 
 \begin{figure}[t]
 \makebox[\textwidth][c]{\includegraphics[width=15cm]{figure/absortion_lyso.png}}
@@ -27,8 +40,28 @@ Otro valor importante a considerar es la longitud de atenuación del cristal. Si 
 
 Finalmente, se utilizan cristales de tamaño 4x4x45 [mm$^3$], lo que (según las especificaciones del fabricante) supone un diseño de 4 longitudes de absorción. 
 
-Es importante aislar ópticamente los cristales para evitar la salida de luz de cada cristal. La luz viaja en el cristal confinada por el material reflectante hasta alcanzar los extremos del cristal donde es absorbida y re-emitida por fibras ópticas. Además, experimentos han demostrado que es posible optimizar la longitud de atenuación con diferentes materiales reflectantes [EXPERIMENTOS WILL]. Los experimentos realizados para seleccionar el material reflectante se pueden encontrar en [TESIS ESTEBAN].
+Es importante aislar ópticamente los cristales para evitar la salida de luz de cada cristal. La luz viaja en el cristal confinada por el material reflectante hasta alcanzar los extremos del cristal donde es absorbida y re-emitida por fibras ópticas. Además, experimentos han demostrado que es posible optimizar la longitud de atenuación con diferentes materiales reflectantes~\cite{huber2000lso}. Los experimentos realizados para seleccionar el material reflectante se pueden encontrar en~\cite{tesis-esteban}.
 
 \subsection{Sistema de lectura}
+
+La luz producida por los cristales centelleadores es recolectada por una matriz de fibras ópticas que la llevan hasta el sistema de lectura. La fibra óptica absorbe la luz emitida y la re-emite en un diferente espectro de frecuencia, lo que facilita la lectura. La matriz de fibras se muestra en la Figura \ref{fig:fibras}, esta es sostenida por una placa plástica tratada de manera especial, de forma que permite el paso de luz por la cara que da a los cristales y al sistema de lectura, mientras que refleja la luz por las caras opuestas.
+
+\begin{figure}[t]
+\makebox[\textwidth][c]{\includegraphics[width=10cm]{figure/fibras.png}}
+%{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
+\caption{Disposición de la matriz de fibras ópticas. \label{fig:fibras}}
+\end{figure}
+
+La disposición del sistema de lectura en el detector preshower es poco común. Los lectores se encuentran en dos de los bordes perpendiculares de la matriz como se muestra en la Figura~\ref{fig:lectura}. Debido a esto, la señal observada consistirá en dos vectores de datos unidimensionales que luego deben ser procesados de manera de obtener la posición incidente en el plano cartesiano. La luz emitida por los cristales centelleadores es guiada por las fibras ópticas a dos arreglos (uno para cada borde), de 25 (50 en total) fotomultiplicadores de silicio (MPPC por \emph{Multi-Pixel Photon Counter}).
+\begin{figure}[t]
+\makebox[\textwidth][c]{\includegraphics[width=10cm]{figure/detector_proto.png}}
+%{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
+\caption{Prototipo de detector preshower y disposición del sistema de lectura en ambos bordes. En uno de los bordes se muestra la disposición de fotomultiplicadores y en el otro la salida de las guías de luz. \label{fig:lectura}}
+\end{figure}
+
+El funcionamiento de los fotomultiplicadores fue descrito en la Sección \ref{sec:fotomultiplicadores}. Estos convierten la luz de entrada en pulsos de corriente medibles mediante la amplificación de los fotoelectrones en los diodos. En específico, los MPPC utilizados en el detector preshower poseen 1440 fotodiodos de avalancha, cada uno con una ganancia de $2.75$x$10^5$. Finalmente, el pulso es digitalizado utilizando módulos de conversión de carga y conversores análogo-digital (ADC). Los datos entregados en formato digital son almacenados en un buffer de salida que puede ser leído con posterioridad. Los buffer guardan los valores de carga [pC] de cada uno de los fotomultiplicadores, obteniendo finalmente dos arreglos de 25 valores (25 para cada eje) de carga entre 0-400[pC] (1 coulumb = $6.25$x$10^8$ electrones). El funcionamiento del sistema de lectura es mucho más complejo que el explicado aquí, sin embargo, no es extrictamente necesario comprender a cabalidad el mecanismo de lectura para explicar el algoritmo de reconstrucción. Un tratamiento más completo del sistema de lectura puede ser encontrado en~\cite{tesis-esteban}. Importante es notar el formato de salida del sistema de lectura y las posibles complicaciones que este puede significar para la reconstrucción de las partículas incidentes, en las próximas secciones se procederá a ahondar más en este tema.
+
+En la siguiente sección se introducirá el algoritmo de reconstrucción, se explicaran las tareas necesarias para el proceso de reconstrucción y se analizará en que manera el algoritmo puede producir información útil para la tarea principal que se desea lograr con el detector preshower: separar partículas muy cercanas entre sí.
+
 
 

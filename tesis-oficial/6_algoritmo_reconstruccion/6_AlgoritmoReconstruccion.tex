@@ -1,0 +1,56 @@
+\chapter{Algoritmo de Reconstrucción \label{algoritmo}}
+
+El algoritmo de reconstrucción es la propuesta principal de este trabajo, por lo que en esta sección se analizará a fondo de que se trata un algoritmo de reconstrucción. Para empezar, debemos observar que, como ya se señaló, la salida del sistema de lectura del detector preshower será el conteo de fotoelectrones producidos por cada uno de los MPPC. Sabemos, también, que los MPPC estan dispuestos en dos bordes perpendiculares de la matriz de cristales, por lo que la salida corresponderá a dos vectores uni-dimensionales de tamaño 25 (que llamaremos eje X y eje Y). El conteo de fotoelectrones es proporcional a la energía depositada por las partículas en el detector, por lo que esto nos permite medir luego la energía depositada por cada partícula. 
+
+El problema es que para obtener información útil para el análisis del experimento necesitamos identificar las partículas, medir su posición y obtener su energía, mientras que sólo poseemos como salida del detector dos histogramas de conteo de fotoelectrones en cada MPPC. Es por esto que se necesita un algoritmo de reconstrucción que se debe encargar de analizar los datos brutos obtenidos por el detector y obtener información útil para el posterior análisis.
+
+\section{Descripción General}
+
+El algoritmo de reconstrucción debe realizar varias tareas con la finalidad de obtener esta información, entre estas están:
+\begin{enumerate}
+\item Separar la señal observada del ruido provocado por el sistema de lectura, la radiación interna de cada cristal, influencia de factores externos, entre otras posibles causas.
+\item Identificar clusters de fotoelectrones que puedan ser considerados como partículas individuales. Los histogramas entregados por cada MPPC corresponden a lluvias electromagnéticas generadas en el detector, al mismo tiempo cada lluvia es generada por partículas incidentes distintas, por lo que la capacidad de identificar cada una de estas lluvias es equivalente a identificar las partículas incidentes.
+\item Medir la energía de las partículas identificadas. Si bien en el preshower se espera que sólo parte de la energía sea absorbida, mientras que la mayoría de la energía debiese ser medida en el detector principal, es necesario de todos modos saber cuanta es la energía que es absorbida en el preshower, esto con la finalidad de utilizar este valor para identificar el tipo de la partícula incidente.
+\item Separar partículas incidentes en caso de que las lluvias estén solapadas. En caso de que las partículas incidentes entren muy cercanas entre sí (este caso es esperado debido a que, como ya se mencionó, la finalidad del preshower es identificar fotones muy cercanos producidos por el decaimiento de un pion neutro), es posible que ambas lluvias se solapen y sean observadas en la lectura final como un sólo cluster, en tal caso es deseable que el algoritmo sea capaz de separar ambos partículas cuando  sea posible, o en caso contrario identificar si el cluster corresponde a una o más partículas.
+
+\end{enumerate}
+
+Es común que el detector sea capaz de medir valores de energía (o un valor proporcional) de manera bi-dimensional, es decir, obtener una posición (X,Y) de la partícula incidente, por ejemplo en detectores calorímetros de cristales donde es posible obtener la energía medida en cada cristal~\cite{alice1999technical}. También un detector puede medir valores de manera tridimensional, obteniendo una posición (X,Y,Z) donde Z corresponde a la posición transversal, esto, en casos en que el detector este también segmentado transversalmente~\cite{colas2005position}. Sin embargo, una particularidad del detector preshower es que sólo es capaz de detectar datos uni-dimensionales de valores acumulados en los ejes longitudinales (X,Y). Esto supone una gran diferencia que debe ser considerada cuidadosamente al implementar el algoritmo de reconstrucción para el detector preshower.
+
+Para este trabajo nos concentraremos en los algoritmo de reconstrucción propuestos para detectores sin segmentación longitudinal, esto debido a que los algoritmos para este tipo de detectores incluyen la reconstrucción de trayectorias, algo que no incumbe al detector preshower. Es común que el algoritmo de reconstrucción se conforme de los siguientes sub-procesos~\cite{alice1999technical}.
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[clip, trim=0.5cm 0.5cm 0.5cm 0.5cm, width=\textwidth]{figure/amb_2and2.pdf}
+        \caption{Existe un problema de ambig\"uedad en la reconstrucción de posiciones. Dos opciones son igual de factibles.  }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[clip, trim=0.5cm 0.5cm 0.5cm 0.5cm,width=\textwidth]{figure/amb_1and2.pdf}
+        \caption{Dos partículas se observan como una en uno de los ejes debido al solapamiento de las lluvias.}
+    \end{subfigure}
+
+    \caption{Diagramas que muestran algunos de los problemas que presenta la particular disposición del sistema de lectura del detector preshower.
+    Debido a que sólo se conocen los valores acumulados de conteo en los ejes X e Y, la reconstrucción de la posición en el plano presenta algunas ambig\"uedades que se deben solucionar. }
+    \label{fig:ambig}
+\end{figure}
+
+
+\begin{itemize}
+\item Una algoritmo clustering, encargada de identificar y separar cada una de las partículas detectadas por el detector. Como ya se mencionó, la entrada para este algoritmo depende del sistema de lectura del detector, ya que es el primer paso en el proceso de reconstrucción, comúnmente esta entrada son mediciones de energía u otro valor en las posiciones (X,Y), sin embargo, en el caso del detector preshower la entrada es distinta por lo que se deben adaptar los algoritmos para ser utilizados en esta situación especial. Comúnmente el conjunto de valores de energía o fotoelectrones deben ser agrupados de manera de representar partículas incidentes. Además es deseable eliminar posibles fuentes de ruido en las lecturas de manera que los cluster obtenidos correspondan a valores correspondientes a señal.
+
+\item En una segunda fase se deben identificar los máximos de cada uno de estos cluster, varios máximos indican que más de una partícula corresponden a ese cluster. Estos máximos pueden corresponder a la posición del lector con mayor conteo de fotoelectrones, sin embargo, este método ingenuo puede tener problemas debido a, por ejemplo, dos lectores vecinos con mediciones altas muy parecidas, además el método es muy sensible al ruido. Otros métodos mas elaborados pueden ser considerados en este paso.
+
+\item En el caso de identificar varios máximos en el mismo cluster es necesario separar la cantidad de fotoelectrones correspondientes a cada una de estas partículas. El algoritmo para la separación de partículas solapadas se conoce como algoritmo de \emph{unfolding}. Este algoritmo es capaz de distribuir la energía entre ambas partículas de manera de obtener dos o más clusters de energías separados que luego serán utilizados en el calculo de posición o energía.
+
+\item Luego de identificar la energía correspondiente a cada partícula para cada uno de los cluster detectados, es necesario reconstruir la posición incidente de la partícula basándose en los valores detectada por el sistema de lectura. El algoritmo de reconstrucción de posición se encarga de estimar la posición de la partícula incidente utilizando la energía depositada y la posición de las celdas de cada cluster. La energía de la partícula puede ser estimada luego integrando los valores de cada cluster.
+\end{itemize}
+
+El algoritmo completo nos entrega mediciones de energía y posición para cada una de las partículas incidentes. Sin embargo hay una diferencia fundamental en el preshower que implica considerar otro paso en el algoritmo de reconstrucción. El sistema readout sólo entrega la información de la cantidad acumulada de fotoelectrones en cada uno de los ejes transversales, por lo que la medición de la energía depositada en cada cristal no esta disponible, lo que genera ciertas ambig\"uedades a la hora de separar dos o más partículas. Considerar por ejemplo que dos clusters son observados en el eje X y en el eje Y. Pensar que se reconstruye la posición de estos cluster con un método cualquiera, obteniéndose posiciones $[x_1, x_2]$ en el eje X y $[y_1,y_2]$ en el eje Y. Entonces, tenemos 2 distintas formas de reconstruir la posición en el plano, $[(x1,y1),(x2,y2)]$ o $[(x1,y2),(x2,y1)]$. El problema se complica mucho más cuando se observan más de dos clusters en los ejes, debido a que pueden ocurrir combinaciones como $[(x1,y2),(x2,y2)]$ en casos en que ambas partículas se observen como un sólo cluster en un de los ejes, debido a solapamiento de las lluvias. En la Figura~\ref{fig:ambig} se observan ambos casos mencionados. Entonces, se debe agregar un paso encargado de la combinación de clusters entre ambos ejes y la resolución de ambig\"uedades  que pudiesen aparecer al combinar los clusters.  Este es un paso fundamental para el funcionamiento del detector preshower y se analizará a mas profundidad en la sección~\ref{experimentos}.
+
+
+En la siguiente sección se analizará las propuestas de la literatura para cada uno de los pasos correspondiente al algoritmo de reconstrucción. Si bien, muchas de estas propuestas se realizan en el contexto de detectores con capacidad para medir la posición en el plano, no es difícil adaptar su funcionamiento al caso uni-dimensional que tratamos en este trabajo. Al conocimiento del autor de esta propuesta, no existe trabajo en algoritmos de reconstrucción para una arquitectura similar a la del detector preshower, por lo que mucho de lo propuesto en la sección~\ref{experimentos} será trabajo original, pero tomando ideas de los algoritmos de reconstrucción propuestos para otros detectores. 
+
+

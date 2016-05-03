@@ -1,4 +1,4 @@
-\chapter{Conceptos Físicos\label{conceptos-fisica}}
+\chapter{Marco Teórico\label{conceptos-fisica}}
 
 En esta sección se presentará una breve descripción de los conceptos físicos relevantes para comprender de una manera general el diseño y funcionamiento del detector Preshower. La finalidad de esta sección es entregar al lector, con conocimientos básicos en física moderna, los conceptos principales que le permitirán comprender de manera general las decisiones de diseño tanto en la construcción del detector, pero principalmente, en la propuesta de algoritmo de reconstrucción. Para mayor información y un tratamiento más técnico de los temas el lector se puede dirigir a \cite{soria2011fisica,leo2012techniques,green2000physics}.
 
@@ -19,9 +19,10 @@ Ahora, debido a que el área del blanco es menor que el haz, el número de partícu
 N_s(\Omega) = FAN\delta x \frac{d\sigma}{d\Omega},\nonumber
 \end{equation}
 entonces, el número de partículas dispersadas en todos los ángulos es
-\begin{equation}
-N_{tot} = FAN\delta x \sigma = N_{inc}N\delta x \sigma,\nonumber
-\end{equation}
+\begin{align}
+N_{tot} &= FAN\delta x \sigma  \\ \nonumber
+ &= N_{inc}N\delta x \sigma,\nonumber
+\end{align}
 de esta manera se puede definir la probabilidad de interacción de una partícula en un material de espesor $\delta x$ como
 \begin{equation} \label{eq:prob}
 \frac{N_{tot}}{N_{inc}} = n\sigma\delta x,
@@ -39,9 +40,11 @@ resolviendo la ecuación diferencial anterior y requiriendo que $P(0) = 1$ se obt
 P(x) = exp(-wx). \nonumber
 \end{equation} 
 Finalmente, es posible calcular la distancia media recorrida por una partícula en un material como
-\begin{equation}
-\lambda = \frac{\int xP(x)dx}{\int P(x) dx} = \frac{1}{w} = \frac{1}{N\sigma}, \nonumber
-\end{equation} 
+\begin{align}
+\lambda &= \frac{\int xP(x)dx}{\int P(x) dx}\nonumber \\ 
+ &= \frac{1}{w}\nonumber \\ 
+ &= \frac{1}{N\sigma}, \nonumber
+\end{align} 
 usando la ecuación \ref{eq:prob} y el hecho de que la probabilidad de interacción en un blanco delgado puede ser expandida como
 \begin{align}
 P_{int}(\delta x) &= 1 - exp(-wx),\nonumber\\ 
@@ -188,7 +191,7 @@ Los fotones producidos por el centelleador son comúnmente traspasados al fotomul
 \caption{Diagrama simple de un centelleador conectado a un fotomultiplicador.\label{fig:centelleador}}
 \end{figure}
 
-\subsection{Fotomultiplicadores}
+\subsection{Fotomultiplicadores} \label{sec:fotomultiplicadores}
 Los fotomultiplicadores son capaces de convertir pulsos de luz en pulsos de corriente eléctrica medibles. Se componen del fotocátado, dínodo y ánodo.
 El fotocátodo emite electrones en respuesta a los fotones incidentes mediante efecto fotoeléctrico. El material que lo compone debe ser un semiconductor con gran probabilidad de efecto fotoeléctrico. Comúnmente, los electrones producidos por el efecto fotoeléctrico se refieren como fotoelectrones $\gamma_e$. La eficiencia cuántica se puede definir como 
 \begin{equation}
