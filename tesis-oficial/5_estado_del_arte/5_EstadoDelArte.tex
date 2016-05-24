@@ -11,12 +11,12 @@ En lo que continua analizaremos algunos de los algoritmos más utilizados en el t
 \subsection{Ventana deslizante}
 Este algoritmo es propuesto por el experimento ATLAS y es utilizado en el proceso de reconstrucción del calorímetro electromagnético y el calorímetro hadrónico~\cite{lampl2008calorimeter}. Los clusters pueden utilizar información combinada de ambos calorímetros, esto es útil para reconstruir jets e identificación de leptones Tau o utilizar solo la información del calorímetro electromagnético, útil para la reconstrucción de electrones y fotones.  
 
-El detector calorímetro en atlas se compone tanto de secciones longitudinales como secciones transversales, las secciones longitudinales se extienden en el espacio $\eta - \sigma$, y existen cuatro secciones transversales en el caso del calorímetro electromagnético: \emph{middle}, \emph{strips}, \emph{pre-sampler} y \emph{back}.
+El detector calorímetro en ATLAS se compone tanto de secciones longitudinales como secciones transversales, las secciones longitudinales se extienden en el espacio $\eta - \sigma$, y existen cuatro secciones transversales en el caso del calorímetro electromagnético: \emph{middle}, \emph{strips}, \emph{pre-sampler} y \emph{back}.
 
 El algoritmo se compone de tres pasos principales: construcción de torres, búsqueda de pre-clusters y llenado de clusters. 
 
 \subsubsection{Construcción de torres}
-El espacio longitudinal $\eta-\sigma$ es segmentado en $N_{\eta}\times N_{\phi}$ celdas de tamaño $\Delta \eta \times \Delta \phi$ formando torres transversales de celdas donde la energía depositada es sumada. Los valores $N_{\eta}$ y $N_{\phi}$ son definidos como parámetros del algoritmo y deben ser seleccionados de antemano. Si existen celdas que corresponden a más de una torre, entonces la energía de las celdas es repartida en en proporción al área de la celda en cada torre.
+El espacio longitudinal $\eta-\sigma$ es segmentado en $N_{\eta}\times N_{\phi}$ celdas de tamaño $\Delta \eta \times \Delta \phi$ formando torres transversales de celdas donde la energía depositada es sumada. Los valores $N_{\eta}$ y $N_{\phi}$ son definidos como parámetros del algoritmo y deben ser seleccionados de antemano. Si existen celdas que corresponden a más de una torre, entonces la energía de las celdas es repartida en proporción al área de la celda en cada torre.
 
 \subsubsection{Búsqueda de pre-clusters}
  Se define una ventana de tamaño fijo $N^{window}_{\eta} \times N^{window}_{\phi}$ en unidades del tamaño de torre $\Delta \eta \times \Delta \phi$. La ventana es movida a lo largo de las torres construidas y pre-clusters son formados en los máximos locales de energía acumulada en la torre (definida como la suma de energías en todas las celdas que forman parte de la torre) que, además, superen un umbral $E_T^{thresh}$.
@@ -27,31 +27,32 @@ El espacio longitudinal $\eta-\sigma$ es segmentado en $N_{\eta}\times N_{\phi}$
  
 \subsubsection{Llenado de clusters}
 
-En el caso de estar trabajando en la formación de clusters combinados con información conjunta del calorímetro hadrónico y electromagnético, los cluster corresponden a los pre-clusters formados en el paso anterior. Para el caso de la construcción de clusters electromagnéticos, se definen diferentes tamaños de clusters para cada una de las capas del calorímetro, esto debido a que el campo electromagnético en el detector afecta de manera diferente a las partículas que pasan por el calorímetro en diferentes capas de este. Los nuevos cluster son construidos basándose en las posiciones calculadas para los pre-clusters. Además se pueden definir clusters de distintos tamaños dependiendo de la partícula hipotetizada. Nose ahondará mucho en esto último debido a que es muy específico al funcionamiento del detector calorímetro de ATLAS.
+En el caso de estar trabajando en la formación de clusters combinados con información conjunta del calorímetro hadrónico y electromagnético, los cluster corresponden a los pre-clusters formados en el paso anterior. Para el caso de la construcción de clusters electromagnéticos, se definen diferentes tamaños de clusters para cada una de las capas del calorímetro, esto debido a que el campo electromagnético en el detector afecta de manera diferente a las partículas que pasan por el calorímetro en diferentes capas de este. Los nuevos cluster son construidos basándose en las posiciones calculadas para los pre-clusters. Además se pueden definir clusters de distintos tamaños dependiendo de la partícula hipotetizada. No se ahondará mucho en esto último debido a que es muy específico al funcionamiento del detector calorímetro de ATLAS.
 
-Este algoritmo es utilizado en el detector atlas para la reconstrucción de electrones y fotones~\cite{aad2012electron,atlas4calorimeter} y la reconstrucción de leptones Tau~\cite{kalinowski2009tau} (aunque en versiones actuales del algoritmo esto se cambió a clustering topológico).
+Este algoritmo es utilizado en el detector ATLAS para la reconstrucción de electrones y fotones~\cite{aad2012electron,atlas4calorimeter} y la reconstrucción de leptones Tau~\cite{kalinowski2009tau} (aunque en versiones actuales del algoritmo esto se cambió a clustering topológico).
 
 
 %El algoritmo de ventana deslizante que se basa en sumar la energ\'ia (n\'otese que no necesariamente se trata de energ\'ia, puede ser conteo de foto-electrones u otra medida, de aqu\'i en adelante se utilizar\'a energ\'ia para simplificar la explicaci\'on) en celdas dentro de un rect\'angulo de tama\~no fijo. La posici\'on central del rect\'angulo es seleccionada de manera de maximizar la cantidad de energ\'ia contenida. Este algoritmo es utilizado en el detector ATLAS para la reconstrucci\'on de lluvias electromagn\'eticas~\cite{lampl2008calorimeter}~\cite{atlas4calorimeter}.
 
-\subsection{Cluster topológico}
+\subsection{Clustering topológico}
 
 Otro método de clustering utilizado en el experimento ATLAS es el cluster topológico~\cite{lampl2008calorimeter,atlas2016topological}. Este algoritmo permite construir clusters de tamaño variable, a diferencia del algoritmo anterior con el que sólo se podían construir clusters de tamaño fijo. El algoritmo consiste de tres pasos principales: búsqueda de semillas, búsqueda de vecinos, construcción de clusters.
 \subsubsection{Búsqueda de semillas}
-El algoritmo comienza con la búsqueda de semillas para construir los clusters. Se identifican las celdas con un valor señal a ruido mayor a un umbral $t_{seed}$ definido de antemano. El valor de señal se define como el valor absoluto de la energía en la celda y otro valor equivalente, mientras que el ruido corresponde al valor esperado del ruido en base a consideraciones electrónicas y físicas. Cada celda seleccionada en este paso corresponde a un proto-cluster.
+El algoritmo comienza con la búsqueda de semillas para construir los clusters. Se identifican las celdas con un valor señal a ruido mayor a un umbral $t_{seed}$ definido de antemano. El valor de señal se define como el valor absoluto de la energía en la celda u otro valor equivalente, mientras que el ruido corresponde al valor esperado del ruido en base a consideraciones electrónicas y físicas. Cada celda seleccionada en este paso corresponde a un proto-cluster.
 \subsubsection{Búsqueda de vecinos}
-La lista de semillas es ordenada en orden descendente basándose en el valor de la razón señal a ruido. Entonces, por cada semilla en orden se consideran las celdas vecinas que superen un umbral $t_{cell}$. Si el vecino no esta en la lista de utilizados y supera el umbral entonces es agregado a un proto-cluster correspondiente a la semilla. Si la celda es adyacente también a otro proto-cluster entonces ambos son combinados. Si la celda agregada además supera un umbral $t_{neighbor}$ entonces la celda es utilizada como semilla para expandir el cluster. Esto asegura que las colas de las lluvias electromagnéticas no sean descartadas pero al mismo tiempo asegura que no se agregue ruido electrónico y de apilamiento. El proceso continua hasta procesar todas las semillas de la lista original, continuando luego con las semillas agregadas por los vecinos en el paso anterior. Esto continua hasta que no quedan más semillas. 
+La lista de semillas es ordenada en orden descendente basándose en el valor de la razón señal a ruido. Entonces, se itera por cada semilla de manera descendente, considerando las celdas vecinas que superen un umbral $t_{cell}$. Si el vecino no esta en la lista de utilizados y supera el umbral entonces es agregado a un proto-cluster correspondiente a la semilla. Si la celda es adyacente también a otro proto-cluster entonces ambos son combinados. Si la celda agregada además supera un umbral $t_{neighbor}$ entonces la celda es utilizada como semilla para expandir el cluster. Esto asegura que las colas de las lluvias electromagnéticas no sean descartadas pero al mismo tiempo asegura que no se agregue ruido electrónico y de apilamiento. El proceso continua hasta procesar todas las semillas de la lista original, continuando luego con las semillas agregadas por los vecinos en el paso anterior. Esto sigue hasta que no quedan más semillas. 
 \subsubsection{Construcción de clusters}
 Como paso final, los proto-clusters que quedan del paso anterior (algunos fueron combinados) son ordenados de mayor a menor (respecto a la energía u otro valor equivalente) y convertidos en clusters. Adicionalmente se pueden eliminar los que tengan energía total $E_t$ menor a un umbral $t_E$, con la finalidad de evitar clusters construidos de ruido.
 
-Notar que es posible que los clusters obtenidos con el algoritmo de clustering topológico correspondan a más de una partícula incidente, debido al solapamiento de lluvias (para el clustering por ventana deslizante se asume que cada cluster de tamaño fijo corresponde a sólo una lluvia). Por lo anterior, es necesario agregar un paso de división de clusters, esto se tratará en la sección~\ref{solapamiento}. 
+Notar que es posible que los clusters obtenidos con el algoritmo de clustering topológico correspondan a más de una partícula incidente, debido al solapamiento de lluvias. Por lo anterior, es necesario agregar un paso de división de clusters, esto se tratará en la Sección~\ref{solapamiento}. 
 
 El algoritmo de cluster topológico ha sido utilizado extendidamente en la reconstrucción de jets y MTE (\emph{missing transverse momentum}) en los calorímetros electromagnético y hadrónico de ATLAS~\cite{pinfold2012evaluation,barillari2008local,cojocaru2004hadronic}, mostrando una gran eficiencia en la reconstrucción~\cite{atlas2016topological}.
 
-\subsection{Fuzzy c-means}
-Otro método exitosamente aplicado en la literatura es el algoritmo de clustering fuzzy c-means. K-means es una muy popular técnica de clustering que aprende de manera no supervisada a encontrar K clusters en los datos. Su uso es muy extendido en la minería de datos y se extiende por las mas variadas disciplinas. Para el trabajo de reconstrucción de partículas en detectores calorímetros, esta técnica (y en general cualquier técnica de clustering duro) no es adecuada ya que asigna cada dato a un sólo cluster, lo que no permite lluvias solapadas, que como ya se vio son muy comunes. Los métodos fuzzy, en cambio, permiten que cada punto pertenezca en menor o mayor grado a diferentes clusters. Estos métodos combinan los algoritmos de clustering básicos con la teoría fuzzy [FUZZY] que permite agregar conceptos de imprecisión e incerteza a los métodos duros. El algoritmo fuzzy c-means, en específico, es una versión fuzzy del algoritmo K-means. Existen estudios de la aplicación de este algoritmo para reconstrucción de partículas en calorímetros~\cite{FUZZY,PRESHOWER}, sin embargo, al conocimiento de este autor no hay aplicaciones reales (en detectores) de este algoritmo.
+\subsection{Clustering Fuzzy}
+Otro método exitosamente aplicado en la literatura es el algoritmo de clustering fuzzy c-means. K-means es una muy popular técnica de clustering que aprende de manera no supervisada a encontrar K clusters en los datos. Su uso es muy extendido en la minería de datos y se extiende por las mas variadas disciplinas. Para el trabajo de reconstrucción de partículas en detectores calorímetros, esta técnica (y en general cualquier técnica de clustering duro) no es adecuada ya que asigna cada dato a un sólo cluster, lo que no permite lluvias solapadas, que como ya se vio son muy comunes. Los métodos fuzzy, en cambio, permiten que cada punto pertenezca en menor o mayor grado a diferentes clusters. Estos métodos combinan los algoritmos de clustering básicos con la teoría fuzzy~\cite{bezdek1984fcm} que permite agregar conceptos de imprecisión e incerteza a los métodos duros. El algoritmo fuzzy c-means, en específico, es una versión fuzzy del algoritmo K-means. Existen estudios de la aplicación de este algoritmo para reconstrucción de partículas en calorímetros~\cite{sandhir2012dynamic,pal2011application}, sin embargo, al conocimiento de este autor no hay aplicaciones reales (en detectores) de este algoritmo.
 
-En ~\cite{FUZZY} el algoritmo fuzzy c-means y una extensión de este, el algoritmo dynamic fuzzy c-means, es aplicado para la reconstrucción en datos simulados de un detector calorímetro de muestreo. En este trabajo se demuestra la utilidad de los algoritmos fuzzy en la tarea de reconstrucción debido a la capacidad de estos métodos de manejar las lluvias solapadas automáticamente. 
+\subsubsection{Fuzzy c-means}
+En ~\cite{sandhir2012dynamic} el algoritmo fuzzy c-means y una extensión de este, el algoritmo dynamic fuzzy c-means, es aplicado para la reconstrucción en datos simulados de un detector calorímetro de muestreo. En este trabajo se demuestra la utilidad de los algoritmos fuzzy en la tarea de reconstrucción debido a la capacidad de estos métodos de manejar las lluvias solapadas automáticamente. 
 
 Fuzzy c-means comienza con un conjunto de datos $X = (x_1, x_2, ..., x_N)$ con $x_i \in \mathbb{R}^d$, para estos datos busca el conjunto de clusters con centros $V = (v_1, v_2, ..., v_C)$ con $v_i \in \mathbb{R}^d$ que minimicen la función de costo 
 \begin{equation}
@@ -71,6 +72,144 @@ con $D_{ik} = ||x_k - v_i|| > 0$ para todo $i$ y $k$. Y
 v_i = \frac{\sum_{k=1}^n(u_{ik})^m x_k}{\sum_{k=1}^n(u_{ik})^m}. \nonumber
 \end{equation}
 El algoritmo procede alternando las estimaciones de $V$ y $U$ hasta alcanzar un número definido de iteraciones o alcanzar un umbral de error $\epsilon$ definido de ante mano.
+Es necesario definir con anterioridad el número de clusters $C$. Para decidir entre distintas opciones de $C$ se suele utilizar un índice de validación. El índice Xie-Beni se define como
+\begin{equation}
+v_{XB}(U,V:X) = \frac{\sum_{i=1}^C\sum_{k=1}^n u_{ik}^2 ||x_k - v_i||^2}{n(\min_{i\neq j}\{||v_i - v_j||\})}, \nonumber
+\end{equation}
+el cual al ser minimizado busca maximizar la separación entre clusters mientras que se minimiza la separación entre los puntos en cada cluster.
+
+\subsubsection{Fuzzy c-means dinámico}
+
+Existe una modificación del algoritmo fuzzy c-means que funciona de manera online~\cite{sandhir2012dynamic}, este algoritmo permite al método adaptarse al patrón de datos de manera dinámica. El algoritmo funciona de la siguiente manera:
+\begin{enumerate}
+\item Con una cantidad de datos iniciales se definen los parámetros $\mu$ (umbral de pertenencia), $\epsilon$ (umbral de error) y los valores $C_{min}$ y 
+$C_{max}$ del algoritmo. Se construyen $C_{min}$ clusters de manera aleatoria y se calculan los grados de pertenencia para los puntos iniciales. 
+\item Por cada dato que llega se calcula su pertenencia a todos los clusters. Si la pertenencia máxima es mayor que el umbral $\mu$, entonces los clusters y pertenencias son actualizadas utilizando el algoritmo de fuzzy c-means. En caso contrario (la máxima pertenencia es menor a $\mu$), se procede al paso 3.
+\item Dado que el número actual de clusters es $C$ se compara con los indices de validación para $L=C-2$ a $L=C+2$ clusters. Los clusters para cada uno de estos valores son construidos utilizando valores guardados con anterioridad. Si ya se habían construido $L$ clusters entonces los valores de clusters son actualizados utilizando el algoritmo de fuzzy c-means para luego evaluar el índice de validación. Si no se han construido $L$ clusters con anterioridad pero sí $L-1$, entonces se agrega un nuevo cluster y se actualizan los valores con el algoritmo estándar. Finalmente se selecciona el número de clusters con el mejor valor para el índice de validación.
+\end{enumerate}
+El algoritmo permite construir los clusters de manera incremental y decidir automáticamente el valor para $C$ (aunque sí se debe definir un mínimo y máximo).
+
+En~\cite{sandhir2012dynamic} ambos algoritmos son aplicados al trabajo de identificación de clusters en un calorímetro de muestre compuesto de tungsteno y silicio (este tipo de calorímetro es utilizado en el experimento CALICE~\cite{simon2009energy}) y para la reconstrucción de fotones que decaen de piones neutros. El algoritmo de fuzzy c-means no funciona bien en casos de observar más de dos clusters debido a que subvalora el número de clusters (principalmente cuando estos clusters se presentan en forma de grupos), en cambio el algoritmo de fuzzy c-means dinámico es capaz de inferir el número correcto de clusters siendo más robusto a estos casos. 
+
+El algoritmo dinámico muestra en general buena performance en el trabajo de reconstrucción de clusters para fotones, sin embargo es considerablemente más lento que los algoritmos de ventana deslizante y clustering topológico, para un análisis de complejidad temporal de los tres algoritmos el lector puede dirigirse al Apéndice A. Otro problema de este algoritmo es que al no considerar la energía de cada celda, se esta perdiendo información que puede ser importante para el proceso de separación de lluvias solapadas.
+
+\section{Identificación de máximos}
+
+Luego de obtener los clusters es necesario estimar los puntos de incidencia de las partículas y separar lluvias solapadas. Para esto es necesario conocer los máximos locales de los clusters. Observar más de un máximo local en un sólo cluster podría indicar el solapamiento de lluvias. Si bien, existen algoritmos relativamente simples para encontrar los máximos locales, estos métodos no consideran ni el ruido presente en los valores ni las fluctuaciones estadísticas. Es posible que muchos de los máximos locales sean producidos por ruido, esos casos deben ser identificados y eliminados con el fin de evitar la identificación de partículas falsas.
+
+Un algoritmo simple para la identificación de máximos locales es presentado en~\cite{alice1999technical}. En este, se definen dos umbrales: \emph{cut2} y \emph{cut3}. Un máximo local es identificado cuando el valor de energía de la celda es mayor que \emph{cut2} y además mayor que todas las celdas inmediatamente vecinas por un valor \emph{cut3}. Los valores para ambos umbrales son definidos con dependencia de las características del detector, sin embargo, los autores mencionan que la definición de máximos locales no es muy sensible a estos valores, definiendo los umbrales como 100 MeV y 60 MeV. El algoritmo presenta varios problemas, por ejemplo, considerar el caso en que dos celdas vecinas tengan energías altas muy parecidas, en tales casos la definición anterior no identificaría un máximo local, ver Figura [REF pendiente]. Si bien, este caso puede ser poco probable cuando los cristales tienen un área relativamente grande, debido a que la mayoría de la energía se deposita en el cristal de incidencia, es un problema muy común al utilizar cristales de menor diámetro (como en el preshower), en los cuales muchas veces la energía se reparte entre dos o más cristales. Otro problema es la definición de los valores para los umbrales, en un detector con cristales amplios se puede asumir cierta estabilidad en la probabilidad de interacción, debido a que la longitud transversal del cristal supera por mucho la longitud de radiación del material, lo que es equivalente a una alta probabilidad de interacción. Sin embargo, para cristales de menor tamaño la probabilidad de interacción es mucho menor y los casos en que las partículas sólo depositan una pequeña parte de su energía, o nada, son más comunes, haciendo que la definición de estos umbrales sea muy complicada y dependiente de cada evento. 
+
+Un algoritmo más elaborado para la identificación de máximos, que también es mas robusto respecto al ruido y no necesita la definición a priori de umbrales (aunque si necesita de otros parámetros) es presentado en~\cite{mariscotti1967method}. Este algoritmo asume que los peaks pueden ser descritos por funciones normales y el background puede ser aproximado por funciones lineares por intervalos. En estos casos se puede aproximar el valor en la celda $x$ como 
+\begin{equation}
+N(x) = G(x) + B + Cx \nonumber
+\end{equation}
+donde $G(x) \sim \mathcal{N}(x,\sigma^2)$ y B y C son constantes. El método usa la segunda derivada de $N(x)$ para encontrar los peak, esto debido a que para la segunda derivada $N''(x)$ el background desaparece y sólo se observan valores $N''(x)\neq0$ en donde se presenta un peak. 
+
+Considerando los valores discretos para cada valor de x, $N_i$, definido como
+\begin{equation}
+N_i = A \exp [-(i - i_0) ^2 / (2\sigma^2)] + B + Cx.
+\label{eq:Nx}
+\end{equation}
+Donde la segunda derivada  se reemplaza por la segunda diferencia 
+\begin{equation}
+S_i = N_{i+1} - 2N_i + N_{i-1}.
+\end{equation}
+El problema es que, debido a que los valores de $N_i$ fluctúan alrededor de su valor esperado según una desviación estándar $F_i$, entonces si $S_{i_0}$ es comparable a la desviación estándar alrededor del peak, entonces no se ha encontrado peak alguno. La desviación estándar de $S_i$ puede ser calculada como
+\begin{equation}
+F_i = (N_{i+1} + 4 N_i + N_{i-1})^{1/2}. \nonumber
+\end{equation}
+Una forma de reducir la desviación estándar de $S_i$ es suavizando la función promediando los valores vecinos es decir 
+\begin{equation}
+S_i(w) = \sum_{j = i-m}^{i+m} S_j, \nonumber
+\end{equation}
+con $w = 2m + 1$. Considerando el caso especial en qu	e $B=C=0$ y definiendo $A_{min}$ como la intensidad del peak menor en \ref{eq:Nx} para la cual $S_{i_0} = F_{i_0}$, entonces $S_{i_0} \gg F_{i_0}$ sólo sí $A \gg A_{min}$. Por lo que se desea minimizar $A_{min}$. Luego de la primera iteración de suavización es posible volver a suavizar la función suavizada, y continuar así, por lo que se puede definir la función suavizada generalizada como 
+\begin{equation}
+S_i(z,w) =  \underbrace{\sum_{j = i-m}^{i+m} ...  \sum_{h = l-m}^{l+m}}_z S_h,
+\end{equation}
+donde se desea encontrar los parámetros $z$ y $w$ dado que se minimice el valor $A_{min}$. En~\cite{mariscotti1967method} se demuestra que los valores que minimizan esta cantidad son 
+\begin{equation}
+z = 4,\quad w = 0.6 \Gamma \nonumber
+\end{equation}
+donde $\Gamma$ es el valor de fwhm (\emph{full width at half maximum}) del peak, que es equivalente a
+\begin{equation}
+\Gamma = 2.355 \sigma. \nonumber
+\end{equation}
+Estos valores son definidos analíticamente de manera de maximizar la capacidad del algoritmo para identificar peak individuales y peaks dobles (casos en que los dos peak son observados solapados con una distancia entre máximos de $S/2$).
+
+\begin{figure}[t]
+\makebox[\textwidth][c]{\includegraphics[width=12cm]{figure/peaks.png}}
+%{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
+\caption[Colisión entre partículas y partículas secundarias producidas]{Diagrama del efecto compton entre un fotón y un electrón.\label{fig:peaks}}
+\end{figure}
+
+Un peak es encontrado en el caso de observar valores $S_i > f F_i$ donde $f$ es un factor de confidencia. En caso de que el background no sea lineal por secciones entonces se pueden definir condiciones extras para definir un peak, buscando que este coincida con algunas características distintivas de un peak, como se demuestra en la Figura~\ref{fig:peaks}. El valor máximo del peak es definido como el centro de masa de la sección I observada en la figura.
+
+Una versión actualizada del algoritmo para casos multidimensionales es presentado en~\cite{morhavc2000identification}. El algoritmo sigue la misma idea buscando peaks en el espacio m-dimensional.
+
+\section{Separación de lluvias solapadas}
+\label{solapamiento}
+Dos peaks en un cluster probablemente indican el solapamiento de dos o más lluvias electromagnéticas, en estos casos es necesario separar las celdas que corresponden a cada una de las lluvias, repartiendo el conteo de las celdas compartidas entre las lluvias.
+
+El algoritmo para la separación de partículas solapadas se conoce como algoritmo de \emph{unfolding}. Este algoritmo es capaz de distribuir la energía entre las partículas de manera de obtener dos o más clusters de energías separados que luego serán utilizados en el calculo de posición o energía. Comúnmente se utiliza la distribución de energía lateral de la lluvia de fotones en los cristales del detector, estos valores están relacionados con el radio de Moliere explicado en la Sección~\ref{sec:lluvias} . En~\cite{berger1992particle} se propone un algoritmo de unfolding que pemíte separar el conteo de cada celda entre las lluvias correspondientes a cada partícula. 
+
+Para separar las lluvias el algoritmo hace uso del perfil lateral del detector. Este define en que forma la energía depositada en las celdas se distribuye a medida que la distancia crece entre la celda y la posición incidente de la partícula. Una buena forma de obtener este perfil es simular la geometría del detector y obtener mediante simulaciones datos que permitan ajustar una función que defina el comportamiento lateral de la lluvia.  La función ajustada depende de la energía de la lluvia electromagnética (en GeV) y la distancia de la celda a la posición incidente y entrega la cantidad de energía esperada en una celda a distancia $\Delta r$ de la posición incidente. En~\cite{berger1992particle} se propone la función 
+\begin{align}
+f(\Delta r, E) &= A \max(\exp(-\Delta r^2/0.33), d\exp(\Delta r /s)) \nonumber \\
+s &= 0.254 + 0.013 E^{0.7} \nonumber \\
+d &= 1.67 - 0.374 \ln(E), \nonumber
+\end{align}
+donde $A$ es un valor de normalización. Esta parametrización es aplicable siempre y cuando el tamaño de la celda sea comparable al radio de Molière. Si bien la dependencia en la energía de la función es un tanto problemática se ha encontrado que esta es más bien baja en rangos definidos de energía~\cite{alice1999technical}, por lo que, como aproximación útil, se puede obviar.
+
+La curva parametrizada y la función obtenida se usa en el calculo de energía para cada celda utilizando la ecuación~\ref{eq:unfolding}, donde $A_i$ es la energía depositada en cada celda, $N$ es el número de máximos, $k$ representa cada cluster a separar y va entre $1$ y $N$, $r_{ij}$ es la distancia entre la celda $i$ y la posición del máximo $j$, $E_j$ es la energía del máximo $j$ y $f$ es la función obtenida por la parametrización. 
+\begin{equation}
+\label{eq:unfolding}
+A_i^k = A_i \cdot \frac{f(r_{ik}, E_k)}{\sum_{j=1}^N f(r_{ij}, E_j)}. 
+\end{equation}
+Con estos datos el algoritmo se resuma en los siguientes pasos:
+\begin{enumerate}
+\item El algoritmo comienza con una estimación de las energías y posiciones de las lluvias correspondientes a cada máximo, para  esto se utilizan las celdas correspondientes a los máximos locales en el cluster, es decir, la posición de la lluvia es dada por el centro de estas celdas y sus energías por la energía depositada en estas celdas.
+\item Luego, la energía en cada celda es dividida en $A_i^1, A_i^2, ... A_i^N$ las energías correspondientes a cada uno de los máximos, utilizando 
+la ecuación~\ref{eq:unfolding}. Esto permite calcular nuevas energías y posiciones para cada una de las lluvias correspondientes a los máximos locales, estas a su vez son utilizadas como entrada para una nueva iteración del algoritmo.
+\item La iteración continua sólo si al menos alguna de las coordenadas de cualquier lluvia cambia en más de 0.01 celdas en cualquier eje y termina si se alcanzan 20 iteraciones, en cuyo caso se considera que el algoritmo no converge. Comúnmente no se necesitan más de 4-5 iteraciones~\cite{alice1999technical}.\\
+\end{enumerate}
+El algoritmo completo es resumido en Algoritmo~\ref{alg:unfolding}
+\begin{algorithm}
+\caption{Algoritmo de unfolding}
+\label{alg:unfolding}
+\begin{algorithmic}[1]
+\State Se tiene como entrada un arreglo con las posiciones y conteos de las celdas en el cluster y un arreglo con las posiciones del o los máximos en el cluster.
+\If{número de máximos $> 1$}
+	\State Inicia los valores de cada lluvia como la posición y energía de las celdas con los máximos.
+	\While{Número iteraciones $< 20$ AND $\bigtriangleup X$(cambio de posición de la lluvia) $> 0.01$}
+		\State Calcular nuevos valores de energía para cada celda.
+		\State Calcular la nueva posición y energía de cada una de las lluvias.
+	\EndWhile
+\EndIf
+\end{algorithmic}
+\end{algorithm}
+
+\section{Reconstrucción de posición}
+La reconstrucción de posición es un método mediante el cual la posición de la partícula incidente es estimada utilizando la energía depositada y la posición de las celdas del cluster. Un método simple propuesto por~\cite{akopdjanov1977determination} es usar el centro de gravedad como se muestra en la Eq. 2.
+\begin{equation}
+\label{eq:weightedsum}
+X_{cg} = \frac{\sum_i w_i x_i}{\sum_i w_i}
+\end{equation}
+Donde $x_i$ representa el centro de la celda $i$ y $w_i$ corresponde al peso asignado a la celda, comúnmente la energía, pulso o conteo correspondiente a la celda. El denominador corresponde, entonces, a la energía total del cluster. Como se menciona en~\cite{bashmakov1998photon} este m\'etodo tiende a presentar un sesgo sistemático hacia la posición del centro de una celda, lo que genera la conocida correlación de forma S entre la posición reconstruida y la posición incidente. 
+
+La ecuación lineal~\ref{eq:weightedsum}, además, no considera el decaimiento exponencial de las lluvias. Para resolver esto, una posible solución es corregir los errores sistemáticos en los valores ajustando la siguiente función
+\begin{equation}
+x_{cg}' = x_{cg} + b \arcsinh{\bigg(\frac{X_{cg}}{\bigtriangleup} \sinh{\delta}\bigg)},\nonumber
+\end{equation} 
+donde el parámetro $b$ se relaciona con la forma exponencial de la lluvia, $\Delta$ es la la mitad del ancho de la celda y $\delta = \Delta / b$. 
+
+En~\cite{bashmakov1998photon} se propone una corrección del sesgo basada en la distribución de la respuesta lateral de los cristales, mediante un método iterativo que reajusta los puntos basándose en cuan parecida es la energía obtenida mediante esta función con la energía observada. Mientras que en~\cite{bugge1986determination}, la corrección necesaria es ajustada mediante el método de mínimos cuadrados a los valores observados.
+
+Otro método, más simple y efectivo y que también usa el centro de gravedad de la ecuación~\ref{eq:weightedsum} pero con diferentes pesos es presentado en~\cite{awes1992simple}. Este método calcula los pesos como:
+\begin{align}
+w_i &= max\{0,[w_0 + \ln\left(\frac{E_i}{E_t}\right)]\},\\
+E_t &= \sum_i E_i.\nonumber
+\end{align}
+Donde $w_0$ es un parámetro adimensional que se debe ajustar y dependende del tamaño y tipo del cristal. Este impone un umbral a la menor energía depositada en una celda que es aceptada para la reconstrucción. Valores mayores de $w_0$ llevan a pesos más uniformes mientras que menores valores favorecen celdas con bajas energías depositadas. El método funciona muy bien y el logaritmo se encarga autom\'aticamente del decaimiento exponencial en el perfil lateral de la lluvia~\cite{awes1992simple}. Si bien, el parámetro $w_0$ es dependiente de la energía incidente de la partícula, esta dependencia es pequeña y un valor fijo de $w_0$ se puede usar con una pequeña perdida en la resolución de posición ~\cite{awes1992simple}. Este algoritmo en específico ha sido usado extendidamente en la literatura~\cite{colas2005position,amarian2001clas,bremer2014measurements}.
 
 
 
