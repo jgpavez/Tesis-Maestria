@@ -1,0 +1,155 @@
+\chapter{Experimentos \label{experimentos}}
+
+\section{Introducción}
+En esta sección se presentan resultados del algoritmo de reconstrucción para simulaciones del detector Preshower. Los estudios que se realizan mediante simulaciones corresponden a:
+\begin{itemize}
+\item Reconstrucción de posición y análisis de errores sistemáticos en la reconstrucción de posición.
+\item Separación de lluvias solapadas utilizando el algoritmo de unfolding.
+\item Identificación de lluvias solapadas en casos en que el algoritmo de separación de lluvias sea incapaz de identificar dos partículas.
+\item Resolución de ambigüedades para más de dos partículas incidentes.
+\item Estudios de resolución energética y de posición para diferentes separaciones entre partículas incidentes.
+\end{itemize}
+
+\section{Simulaciones}
+Para estudiar la performance del algoritmo de reconstrucción en el detector preshower, el detector ha sido simulado utilizando GEANT 4~\cite{agostinelli2003geant4}. El prototipo simulado corresponde a un arreglo de 25x25 cristales LYSO. Cada cristal tiene un tamaño cd 4x4x45 mm$^3$. Los cristales están cubiertos por una pintura reflectora en la cara trasera para evitar fuga de fotones por la cara no sensible. En la cara frontal de la matriz de cristales una placa de acrílico de ancho igual a 1.5 mm es posicionada. Esta placa esta cubierta por un material reflector en su cara frontal para evitar la fuga de fotones. En la placa se posicionan 25 fibras horizontales y 25 fibras verticales de 1 mm de diámetro que pasan por el centro de cada cristal. Estas fibras también están cubiertas por materiales reflectantes en las esquinas no sensitivas para evitar la fuga de fotones. Los MPPC son reemplazados por materiales sensibles que pemiten medir los fotones que llegan al sistema de lectura. Toda la geometría esta cubierta por placas de aluminio de 2.5 mm de espesor con uniones de cobre. Una simulación de la geometría completa del detector es mostrada en la Figura~\ref{fig:detector_completo}.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[clip, trim=0.5cm 0.5cm 0.5cm 5.5cm, width=\textwidth,angle=90]{figure/detector-2.pdf}
+        \caption{Cara frontal.}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.42\textwidth}
+        \includegraphics[clip, trim=2.5cm 7.5cm 0.5cm 0.5cm,width=\textwidth,angle=90]{figure/detector-1.pdf}
+        \caption{Perspectiva rotada.}
+    \end{subfigure}
+
+    \caption{Geometría del detector preshower completa simulada. Mostrado en verde se observa la matriz de cristales, en plomo el material cobertor de la matriz y el sistema de lectura, en rojo se muestra la placa de acrílico en la que se montan las fibras de luz (no mostradas para facilitar la visualización de los componentes).}
+    \label{fig:detector_completo}
+\end{figure}
+
+ La geometría ha sido simplificada con la finalidad de acelerar el lento proceso de simulación en los experimentos para la reconstrucción. Muchos de los elementos exteriores del detector (como la cubierta protectora) no fueron considerados. Estos elementos se utilizan principalmente para evitar influencia de factores externos que no están presentes en las simulaciones. Además, la matriz de fibras para la lectura y el sistema de lectura es removido para evitar el lento trabajo de simulación de los procesos en las fibras. En su lugar la respuesta obtenida por el panel de lectura es aproximada usando un modelo estadístico basado en mediciones reales que permite obtener la cantidad aproximada de fotones que llegan a cada MPPC en base a la energía medida en cada cristal. Para obtener el modelo estadístico utilizado para simular la salida de cada MPPC dada la energía medida en cada cristal se asume que la cantidad de fotoelectrones que llegan a cada MPPC es una función de Poisson de la suma de energía que llegan al MPPC desde cada cristal. La energía que llega al MPPC desde cada cristal se modela como una distribución gaussiana centrada en la posición del cristal en el eje correspondiente al MPPC normalizada según el valor de energía depositada en el cristal. En términos matemáticos, los valores $p_{xl}$ y $p_{yk}$ correspondientes a la salida de la fibra $l$ y $k$ en el eje $x$ e $y$ respectivamente se calculan en base a las energías $E_{ij}$ correspondientes al cristal $(i,j)$. Primero se calculan los valores $u^l_{ij}$, $u_{ij}^k$ como: 
+\begin{eqnarray}
+u_{ij}^{l} = 20 \cdot E_{ij} \cdot \bigg[\frac{1}{2\sqrt{2\cdot\pi\cdot4}}\exp\bigg(\frac{-(l - i)^2}{2\cdot4}\bigg)\bigg],\nonumber\\
+u_{ij}^{k} = 15 \cdot E_{ij} \cdot \bigg[\frac{1}{2\sqrt{2\cdot\pi\cdot6.25}}\exp\bigg(\frac{-(k - j)^2}{2\cdot6.25}\bigg)\bigg],\nonumber
+\end{eqnarray}
+entonces, $p_x^l$ y $p_y^k$ las salidas de las fibras $l$ y $k$ en los eje $x$ e $y$ son calculados como
+\begin{eqnarray}
+p_x^l = Poiss\big(\sum_{ij} u_{ij}^{l}\big),\nonumber\\
+p_y^k = Poiss\big(\sum_{ij} u_{ij}^{k}\big),\nonumber
+\end{eqnarray}
+ 
+Estas salidas corresponden al conteo de foto electrones detectado por el MPPC $l$ o $k$.
+ En la Figura~\ref{fig:detector_min} se muestra la versión simplificada del detector en conjunto a la interacción de dos partículas $\gamma$ incidentes.
+ 
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[clip, trim=0.5cm 0.5cm 0.5cm 5.5cm, width=\textwidth,angle=90]{figure/interaction_2.pdf}
+        \caption{Perspectiva rotada.}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.42\textwidth}
+        \includegraphics[clip, trim=2.5cm 7.5cm 0.5cm 0.5cm,width=\textwidth,angle=90]{figure/interaction_1.pdf}
+        \caption{Cara superior.}
+    \end{subfigure}
+
+    \caption{Geometría simplificada del detector preshower, donde sólo se simula la matriz de cristales del detector. En la imagen se muestra la matriz en verde y la interacción de dos partículas $\gamma$ incidentes de 5 GeV. Las trayectorias de los electrones son mostradas en rojo mientras que las trayectorias de positrones son mostradas en verde.}
+    \label{fig:detector_min}
+\end{figure}
+
+Los experimentos fueron realizados en el rango 0.5-10 GeV. Se consideró un valor de ruido de 2.25 MeV, este valor fue seleccionado en base a la eficacia del algoritmo de clustering para identificar clusters correctamente en el rango de energía mencionado anteriormente (este valor es mucho menor que los valores utilizados en la literatura~\cite{PHOS}, debido al tamaño considerablemente menor de los cristales para el detector preshower). Los experimentos fueron realizados utilizando partículas $\gamma$, lanzadas distribuidas de manera uniforme e en el cuadrado central de 80x80 cm de la matriz de cristales (esto para evitar casos especiales en los cuales las partículas inciden muy cerca de los límites, en los cuales cierta energía es perdida provocando algunos problemas en la reconstrucción).
+
+\section{Algoritmo de reconstrucción}
+En esta sección se presenta el algoritmo de reconstrucción propuesto para el detector preshower y se estudia la eficacia en la reconstrucción de partículas mediante simulaciones. Debido a que el foco principal del detector preshower es detectar partículas $\gamma$ muy cercanas entre sí, que comúnmente provienen del decaimiento de un pión neutro, especial cuidado se debe tomar en los siguientes puntos:
+\begin{itemize}
+\item Identificación de lluvias electromagnéticas provenientes de partículas gammas individuales. Reconstrucción de posición de incidencia y energía depositada de estas partículas.
+\item Reconocimiento y separación de partículas $\gamma$ solapadas, especialmente para el caso de dos partículas muy cercanas (el caso del pión neutro). 
+\item Rechazo de partículas solapadas en casos en que estas no puedan ser separadas. Esto, para evitar reconocer las partículas como un solo fotón en casos en que no sea así.
+\end{itemize}
+El algoritmo completo de reconstrucción consiste de los siguientes procesos
+\begin{enumerate}
+\item Construcción de clusters.
+\item Identificación de máximos en los clusters.
+\item Separación de lluvias solapadas.
+\item Rechazo de partículas solapadas que no puedan ser separadas.
+\item Reconstrucción de posición y energía.
+\item Resolución de ambigüedades.
+\end{enumerate}
+
+\subsection{Algoritmo de clustering}
+El algoritmo de clustering es el paso principal del algoritmo de reconstrucción. Para el detector preshower se decidió utilizar el algoritmo topológico presentado en la Sección~\ref{topológico}. El algoritmo de clustering topológico es un algoritmo muy utilizado en la práctica y permite la construcción de clusters de tamaños variables (a diferencia del algoritmo de ventana deslizante), lo que es importante para el detector preshower, debido a que la profuncidad menor de los cristales provoca una gran variabilidad en la cantidad de energía depositada en cada evento (esto a causa de que muchas de las partículas interactúan en la sección final del cristal, depositando sólo una parte de su energía). Otras opciones, como el algoritmo de clustering fuzzy, fueron rechazadas debido a la poca o nula utilización en experimentos reales de estos algoritmos y debido a que no utilizan toda la información disponible en el preshower (en el caso del algoritmo de clustering fuzzy, no se hace uso de la información disponible en la distribución lateral de la matriz de cristales).
+
+El algoritmo de clustering topológico implementado para el detector preshower se resume en el Algoritmo~\ref{alg:algtopologico}.
+\begin{algorithm}
+\caption{Algoritmo de clustering}
+\label{alg:algtopologico}
+\begin{algorithmic}[1]
+\State Como entrada se tiene dos arreglos de valores para cada celda y para cada eje (X e Y).
+\Procedure{Adyacentes}{celda,cluster}
+  \For{Cada vecino de la celda}
+  	\State{Añadir vecino a cluster}
+	\State{Marcar celda de vecino como usado}
+	\State{Llamar Adyacentes(vecino,cluster)}
+  \EndFor
+\EndProcedure
+\For{Cada eje }
+	\State {El arreglo de conteos es llenado con los valores mayores a \emph{cut1} en el eje correspondiente.}
+	\State {El arreglo de conteos es ordenado de mayor a menor y todos los valores son inicializados como no usados. }
+	\For{Cada valor en el arreglo de conteos}
+		\If{Si valor es mayor a \emph{cut2} y el valor no esta marcado como usado}
+			\State{Crear nuevo cluster}
+			\State{Añadir posición como semilla de un cluster, marcar celda como usada.}
+			\State{Llamar Adyacentes(semilla,cluster)}
+		\EndIf
+	\EndFor
+\EndFor
+
+\end{algorithmic}
+\end{algorithm}
+
+Los valores \emph{cut1} y \emph{cut2} corresponden al umbral de ruido y a un umbral útil para identificar máximos respectivamente. Estos valores fueron elegidos observando la eficacia del algoritmo de clustering para identificar partículas en el umbral 0.5-10 GeV. Sin embargo se nota que el algoritmo es relativamente robusto a variaciones (no muy grandes) de estos valores. Los valores usados son $cut1 = 2.25$ y $cut2 = 3.75$. 
+
+Notar que el algoritmo no es exactamente igual al algoritmo topológico presentado en la Sección ~\ref{topológico}. De este se ha quitado al recombinación de clusters y el umbral utilizado en la decisión de utilizar el vecino como semilla o no, en cambio todos los vecinos son utilizados como semilla y de la separación de clusters se encarga el algoritmo de unfolding. 
+
+El algoritmo continua con la búsqueda máximos locales en cada uno de los clusters por separado. 
+
+\subsection{Búsqueda de máximos}
+El siguiente paso del algoritmo es la búsqueda de máximos en cada uno de los clusters encontrados. El análisis posterior depende de la cantidad de máximos encontrados en cada cluster. En caso que se encuentre sólo un máximo, entonces se considera que el cluster ha sido originado por una sola lluvia o puede ser originado por más de una lluvia pero imposibles de separar. En este caso se analiza, en caso de ser posible, si el cluster proviene de más de una partícula, si no, la posición de la partícula incidente y su energía puede ser reconstruida. Si el cluster posee dos o más máximos, entonces se considera una superposición de lluvias electromagnética y el algoritmo de unfolding es aplicado con la finalidad de separar las lluvias. 
+
+\begin{figure}[t]
+\makebox[\textwidth][c]{\includegraphics[width=15cm]{figure/plot1_2.pdf}}
+%{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
+\caption[Dos]{Histograma de photo-electrones para cada uno de los ejes para un evento de dos gamas incidentes de 5 GeV. Se observa que la partícula incidente alrededor de la posición 11 del eje Y es muy difícil de identificar como un máximo, ya que no produce un máximo local fácilmente identificable.\label{fig:dosmaximos}}
+\end{figure}
+
+Es posible identificar los máximos asignando reglas simples que funcionen en la mayoría de los casos. En~\cite{alice1999technical} se revisan los valores mayores a un umbral y si el valor de esta celda es además mayor a todos sus vecinos por una cantidad definida con anterioridad, entonces la celda es identificada como máximo local. Sin embargo, para el detector preshower el problema es considerablemente más complicado. Debido a la relativamente baja probabilidad de interacción en el detector preshower, la cantidad de energía depositada en cada evento es muy variable (a diferencia de un detector con una profundidad de varias longitudes de radiación, donde la mayoría de las partículas interactúan). Debido esto, la definición de umbrales a priori para identificar los máximos es complicada. Además, debido al diámetro menor de los cristales en el preshower, se dan muchos casos como el mostrado en la Figura~\ref{fig:dosmaximos} (varios cristales comparten gran parte de la energía, imposibilitando la identificación de máximos locales), en los que sería imposible identificar un máximos utilizando las reglas simples mencionadas con anterioridad.
+
+Debido a lo anterior, se ha decidido utilizar el algoritmo presentado en la Sección~\ref{maximos}. La versión utilizada del algoritmo es la del paquete ROOT~\cite{antcheva2009root}, en la clase \emph{TSpectrum}. Si bien el algoritmo se basa principalmente en el algoritmo presentado en~\cite{mariscotti1967method} y su versión para varias dimensiones presentada en~\cite{morhavc2000identification}, se agregan algunos pasos extra. Primero, se agrega un paso extra de suavizado, basado en utilizar la distribución estacionaria de una cadena de markov, que asigna mayor probabilidades a las celdas en que se encuentran los peaks, como se menciona en~\cite{silagadze1996new}, este método suaviza y al mismo tiempo intensifica los peaks de la distribución original. Además, se agrega un filtro para los peaks encontrados, que sólo retorna los peaks que tienen una amplitud mayor a $threshold\times 100 \%$ de el mayor peak. El valor de threshold y el $\sigma$ utilizado en el algoritmo presentado en~\ref{maximos} son definidos como argumentos de la función, para el detector preshower se definieron valores de $\sigma = 2$ y $threshold = 0.05$ (estos son los valores por default, no se encontró mayor diferencia al variar estos valores alrededor del default). En la Figura~\ref{fig:peaks} se muestra el algoritmo de búsqueda de peaks funcionando para un caso difícil del detector preshower.
+
+\begin{figure}[t]
+\makebox[\textwidth][c]{\includegraphics[width=15cm]{figure/plot2_2.pdf}}
+%{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
+\caption[Dos]{Histograma de photo-electrones para cada uno de los ejes para un evento de dos gamas incidentes de 5 GeV. El algoritmo de búsqueda de máximos identifica todas las partículas incidentes en cada eje de manera exitosa, incluso para el caso difícil del eje Y.\label{fig:peaks}}
+\end{figure}
+
+\subsection{Algoritmo de unfolding}
+El método a utilizar para la separación de lluvias solapadas es el presentado en la Sección~\ref{solapamiento}. El método se basa en el conocimiento de la distribución lateral de la lluvia en los cristales, por lo que primero la distribution de respuesta lateral unidimensional debe ser calculada y parametrizada para ser usada en la separación de la energía depositada en celdas solapadas. La distribución lateral puede ser calculada mediante simulaciones. Para esto se simularon 2500 eventos, cada uno correspondiente a un gamma de 10 GeV lanzado en las dos celdas centrales. Entonces, el conteo de foto-electrones en una celda vs la distancia entre el centro de la celda y la posición incidente es graficado. La función obtenida se muestra en la Figura~\ref{lateral}. Sobre estos datos se ajusta la función~\ref{eq:lateral} que provee una parametrización sobre los datos.  
+\begin{eqnarray}
+f(r,E) = \begin{cases} 1.06 \cdot A \cdot \exp{-7.31 \cdot r^{1.28}}   & r < 0.6 \\
+39.69 \cdot A \cdot \exp{-8.23 \cdot r^{0.17}} & r \geq 0.6 \end{cases},
+\label{eq:lateral}
+\end{eqnarray}
+donde $r$ es la distancia de la celda a la posición incidente en cm, $A$ es una constante de normalización que corresponde al conteo estimado de fotoelectrones de la lluvia. Las simulaciones entregan curvas laterales muy similares para diferentes gamas con diferentes energías, por lo que la dependencia en $E$ de la función esta sólo contenida en el parámetro de normalización.  
+
+El algoritmo de unfolding comienza con una estimación del conteo de fotoelectrones y posición de las lluvias correspondientes a cada máximo. Para esto se utilizan los valores de conteo y posición central de las celdas correspondientes a los máximos locales. Entonces algoritmo continua de acuerdo a lo explicado en la Sección~\ref{solapamiento}, adaptado para el caso unidimensional,  con la diferencia que el algoritmo continua si cualquiera de las posiciones estimada para los clusters en uno de los ejes cambia en más de 0.01 celdas. En caso que el algoritmo no converga luego de 20 iteraciones el cluster es descartado. El algoritmo completo para el caso unidimensional del detector preshower es resumido en el diagrama de la Figura~\ref{fig:algunfolding}. 
+
+\subsection{Reconstrucción de posición y energía}
+
+
+
+
+
+
+
