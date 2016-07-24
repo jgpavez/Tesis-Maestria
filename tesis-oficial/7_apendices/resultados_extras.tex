@@ -1,0 +1,242 @@
+\chapter{Resultados adicionales}
+\label{ApendiceB}
+En esta sección se presentarán resultados adicionales del funcionamiento del algoritmo de reconstrucción.
+
+\section{Reconstrucción de posición}
+
+Como una forma de comprender mejor el funcionamiento del algoritmo de reconstrucción, podemos analizar los errores de reconstrucción para cada una de las posibilidades que se dan al reconstruir dos partículas: 
+\begin{enumerate}
+\item Sólo una partícula es identificada de manera errónea.
+\item Un cluster es identificado en uno de los ejes y en el otro un cluster con dos máximos.
+\item Dos clusters son identificados en un eje y en el otro un cluster con un máximo.
+\item Dos clusters separados son identificados en ambos ejes.
+\item Dos clusters en un eje y en el otro un cluster con dos máximos.
+\item Un cluster con dos máximos en ambos ejes.
+\end{enumerate}
+
+El algoritmo de unfolding debe ser aplicado en los casos 2, 5 y 6. Mientras que la resolución de ambigüedades utilizando el conteo de fotoelectrones debe ser aplicada en los casos 3 y 6.
+
+En la Figura~\ref{fig:10_1_errores} y~\ref{fig:10_10_errores} se presentan histogramas para el error de reconstrucción para cada uno de estos casos y para las combinaciones de partículas de 10+1 GeV y 10+10 GeV. En el Cuadro~\ref{tab:errores_extra} se presentan los valores resumidos para el error de reconstrucción para las combinaciones de partículas 10+1, 10+5, 10+10 y 10+15 GeV y para cada uno de los casos enumerados anteriormente. 
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|p{1cm} p{1cm}| p{1.8cm} |p{1.8cm} |p{1.8cm} |p{1.8cm}| p{1.8cm}| p{1.8cm} |}
+\hline
+    &  & \multicolumn{6}{c|}{Resolución posición [mm]} \\\hline
+\multicolumn{2}{|c|}{Energias  [GeV]} & Caso 1 & Caso 2 & Caso 3 & Caso 4 & Caso 5 & Caso 6  \\ \hline
+\multirow{2}{*}{10 + 1} & 10  & 3.807 $\pm$ 5.137 & 2.1 $\pm$ 2.523 & 1.876 $\pm$ 2.66 & 1.382 $\pm$ 0.7241 & 1.632 $\pm$ 1.135 & 2.253 $\pm$ 1.081 \\ 
+ & 1  & 8.862 $\pm$ 7.829  & 3.603 $\pm$ 4.685 & 3.032 $\pm$ 4.503  & 1.035 $\pm$ 0.4122  & 1.68 $\pm$ 1.357 & 3.093 $\pm$ 1.394 \\ \hline
+\multirow{2}{*}{10 + 5} & 10  & 5.224 $\pm$ 6.268 & 2.538 $\pm$ 3.169 & 2.105 $\pm$ 2.943 & 1.18  $\pm$ 0.6835 & 2.051 $\pm$ 1.692 & 2.407 $\pm$ 1.103 \\ 
+ & 5  & 6.936 $\pm$ 7.14  & 2.996 $\pm$ 3.798 & 3.187 $\pm$ 4.803  & 0.6828 $\pm$ 0.33  & 1.7 $\pm$ 1.043 & 2.67 $\pm$ 1.129 \\ \hline
+ \multirow{2}{*}{10 + 10} & 10  & 6.397 $\pm$ 6.915 & 2.617 $\pm$ 3.588 & 2.773 $\pm$ 4.963 & 1.132  $\pm$ 0.7415 & 2.039 $\pm$ 1.408 & 2.526 $\pm$ 1.101 \\ \hline
+ \multirow{2}{*}{10 + 15} & 10  & 5.929 $\pm$ 6.585 & 2.819 $\pm$ 3.709 & 3.153 $\pm$ 4.502 & 0.7519  $\pm$ 0.0 & 1.795 $\pm$ 0.9704 & 2.665 $\pm$ 1.424 \\ 
+ & 15  & 5.656 $\pm$ 6.585  & 2.628 $\pm$ 3.471 & 2.145 $\pm$ 3.18  & 0.6303 $\pm$ 0.0  & 1.665 $\pm$ 0.9577 & 2.449 $\pm$ 1.088 \\ \hline
+ \end{tabular}
+\caption{Error de reconstrucción para partículas $\gamma$ para cada uno de los casos del algoritmo. Se presentan resultados para partículas de 1, 5, 10 y 15 GeV.  \label{tab:errores_extra}}
+\end{table}
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_1/x_axis_1.pdf}
+        \caption{Una partícula identificada. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_1/x_axis_2.pdf}
+        \caption{Un cluster en un eje y un cluster con dos máximos en el otro. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_1/x_axis_3.pdf}
+        \caption{Dos clusters en un eje y un cluster con un máximo en el otro. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_1/x_axis_4.pdf}
+        \caption{Dos clusters en ambos ejes. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_1/x_axis_5.pdf}
+        \caption{Dos clusters en un eje y un cluster con dos máximos en el otro. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_1/x_axis_6.pdf}
+        \caption{Un cluster con dos máximos en ambos ejes.}
+    \end{subfigure}\\
+    \caption{Histogramas del error de reconstrucción $X_{rec} - X_{inc}$ para combinaciones de partículas $\gamma$ de 10 y 1 GeV y diferentes casos del algoritmo de reconstrucción. En cada gráfico se muestra el error para cada una de las partículas por separado.}
+    \label{fig:10_1_errores}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_10/x_axis_1.pdf}
+        \caption{Una partícula identificada. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_10/x_axis_2.pdf}
+        \caption{Un cluster en un eje y un cluster con dos máximos en el otro. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_10/x_axis_3.pdf}
+        \caption{Dos clusters en un eje y un cluster con un máximo en el otro. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_10/x_axis_4.pdf}
+        \caption{Dos clusters en ambos ejes. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_10/x_axis_5.pdf}
+        \caption{Dos clusters en un eje y un cluster con dos máximos en el otro. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_10/x_axis_6.pdf}
+        \caption{Un cluster con dos máximos en ambos ejes.}
+    \end{subfigure}\\
+    \caption{Histogramas del error de reconstrucción $X_{rec} - X_{inc}$ para dos partículas $\gamma$ de 10 GeV y diferentes casos del algoritmo de reconstrucción.}
+    \label{fig:10_10_errores}
+\end{figure}
+
+Algunas conclusiones que se pueden obtener de estos resultados:
+\begin{itemize}
+\item Los casos en que se observan dos clusters separados son poco probables en comparación con el resto. Esto debido al ancho de las lluvias observadas por cada uno de los ejes (ensanchamiento propiciado por los efectos electrónicos tomados en cuenta en el modelo de la ecuación~\ref{eq:modelo}).
+\item El error es mayor en los casos en que se observa sólo un cluster o un máximo en alguno de los ejes. Esto es de esperar ya que en caso de observarse un máximo la posición reconstruida es una posición intermedia entre ambas partículas, lo que aumenta el error de reconstrucción.
+\item Aunque existen algunas diferencias entre los errores para cada uno de los casos, estas son mas bien pequeñas, lo que demuestra que el algoritmo de reconstrucción funciona bien para cada uno de los posibles casos.
+\end{itemize}
+
+\section{Reconstrucción en el eje Y}
+
+En la Figura~\ref{fig:errores_y} se presentan los errores de reconstrucción para el eje Y para las combinaciones de partículas gamma de 10+1, 10+5, 10+10 y 10+15 GeV. Los errores son presentados para los caso en que las partículas deban ser separadas mediante el algoritmo de unfolding y para cuando las partículas se presentan en dos clusters totalmente separados.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_1/y_axis_small_1.pdf}
+        \caption{10 + 1 GeV. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_1/y_axis_small_2.pdf}
+        \caption{10 + 1 GeV. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_5/y_axis_small_1.pdf}
+        \caption{10 + 5 GeV. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_5/y_axis_small_2.pdf}
+        \caption{10 + 5 GeV. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_10/y_axis_small_1.pdf}
+        \caption{10 + 10 GeV. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_10/y_axis_small_2.pdf}
+        \caption{10 + 10 GeV. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_15/y_axis_small_1.pdf}
+        \caption{10 + 15 GeV. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_15/y_axis_small_2.pdf}
+        \caption{10 + 15 GeV. }
+    \end{subfigure}\\
+    \caption{Histogramas del error de reconstrucción $Y_{rec} - Y_{inc}$ para varias combinaciones de partículas $\gamma$. En cada gráfico se muestra el error para cada una de las partículas por separado (en el caso de 10+10 GeV sólo se muestra el error para 10 GeV).}
+    \label{fig:errores_y}
+\end{figure}
+
+En base a los resultados para el eje Y se puede observar que:
+\begin{itemize}
+\item Los errores son mayores para el eje Y que para el eje X. Esto se explica en parte por la mayor varianza del modelo presentado en~\ref{eq:modelo}. Esta varianza representa los distintos efectos electrónicos y físicos de la propagación de la lluvia por las fibras. Una mayor varianza en las distribuciones normales del modelo provoca lluvias más anchas y por lo tanto más difíciles de reconstruir. Además las lluvias se cubren entre ellas, haciendo parecer que sólo una partícula fue observada. 
+\item Algunos peaks anormales son observados en las colas de la distribución de errores, en especial para el caso 10+10 GeV. Esto se debe al funcionamiento del algoritmo de resolución de ambigüedades. En los casos en que la energía depositada por ambas partículas sea parecida (caso más probable para la combinación 10+10) es posible que las posiciones sean emparejadas incorrectamente, produciendo un gran error en uno de los ejes. Debido al funcionamiento del algoritmo, el eje Y es el que se empareja a la reconstrucciones obtenidas en el eje X, por lo que se producen estos casos en los que el error es muy mayor a la media. Para solucionar esto es necesario trabajar más en el algoritmo de resolución de ambigüedades. 
+\end{itemize}
+
+\section{Reconstrucción del conteo de fotoelectrones}
+
+La reconstrucción de la energía incidente no es posible en el detector preshower. Esto debido a que la medición de cada MPPC es una función del conteo de fotoelectrones que llegan por las fibras desde los cristales centelleadores. Esta medición es influenciada por otros factores, como la ganancia en el sistema de lectura, efectos ópticos en las fibras, perdida de energía por los bordes de la matriz, entre otros. Sin embargo, aún es útil observar las distribuciones de fotoelectrones obtenidas por el algoritmo de reconstrucción para encontrar cualquier comportamiento anormal que pudiese estar indicando un mal funcionamiento del algoritmo. En la Figura~\ref{fig:10_1_ene} y~\ref{fig:10_10_ene} se observa el conteo de fotoelectrones para cada una de las partículas en las combinaciones 10+1 y 10+10 GeV y para cada uno de los posibles casos del algoritmo.
+
+\begin{figure}
+
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_1/ene_2.pdf}
+        \caption{Un cluster en un eje y un cluster con dos máximos en el otro. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_1/ene_3.pdf}
+        \caption{Dos clusters en un eje y un cluster con un máximo en el otro. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_1/ene_4.pdf}
+        \caption{Dos clusters en ambos ejes. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_1/ene_5.pdf}
+        \caption{Dos clusters en un eje y un cluster con dos máximos en el otro. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_1/ene_6.pdf}
+        \caption{Un cluster con dos máximos en ambos ejes.}
+    \end{subfigure}\\
+    \caption{Histogramas de reconstrucción del conteo de fotoelectrones para combinaciones de partículas $\gamma$ de 10 y 1 GeV y diferentes casos del algoritmo de reconstrucción. En cada gráfico se muestra la reconstrucción para cada una de las partículas por separado.}
+    \label{fig:10_1_ene}
+\end{figure}
+
+\begin{figure}
+
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_10/ene_2.pdf}
+        \caption{Un cluster en un eje y un cluster con dos máximos en el otro. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_10/ene_3.pdf}
+        \caption{Dos clusters en un eje y un cluster con un máximo en el otro. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_10/ene_4.pdf}
+        \caption{Dos clusters en ambos ejes. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_10/ene_5.pdf}
+        \caption{Dos clusters en un eje y un cluster con dos máximos en el otro. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_10/ene_6.pdf}
+        \caption{Un cluster con dos máximos en ambos ejes.}
+    \end{subfigure}\\
+    \caption{Histogramas de reconstrucción del conteo de fotoelectrones para combinaciones de partículas $\gamma$ de 10 GeV y diferentes casos del algoritmo de reconstrucción.}
+    \label{fig:10_10_ene}
+\end{figure}
+
+De los resultados de la reconstrucción de energía se observa que:
+\begin{itemize}
+\item Las partículas de baja energía depositan menos fotoelectrones que las partículas de mayor energía (observar el caso 10+1). Algo esperado y que indica que el algoritmo no esta realizando una reconstrucción errónea del conteo de fotoelectrones.
+\item Para los casos en que el algoritmo de unfolding debe ser implementado existe una pequeña diferencia en la media del conteo de fotoelectrones respecto a cuando no se usa el algoritmo. Esto se debe a que al realizar la reconstrucción, las energías que están bajo el umbral de ruido y que son descartadas en el caso de clusters separados, podrían aportar en el caso de clusters solapados, ya que la suma del solapamiento de las lluvias supera el umbral de ruido. 
+\end{itemize}
+

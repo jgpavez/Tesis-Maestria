@@ -6,7 +6,7 @@ En esta sección se presentan resultados del algoritmo de reconstrucción para sim
 \item Reconstrucción de posición y análisis de errores sistemáticos en la reconstrucción de posición.
 \item Separación de lluvias solapadas utilizando el algoritmo de unfolding.
 \item Identificación de lluvias solapadas en casos en que el algoritmo de separación de lluvias sea incapaz de identificar dos partículas.
-\item Resolución de ambigüedades para más de dos partículas incidentes.
+\item Resolución de ambigüedades para más de una partícula incidentes.
 \item Estudios de resolución energética y de posición para diferentes separaciones entre partículas incidentes.
 \end{itemize}
 
@@ -31,13 +31,14 @@ Para estudiar la performance del algoritmo de reconstrucción en el detector pres
 
  La geometría ha sido simplificada con la finalidad de acelerar el lento proceso de simulación en los experimentos para la reconstrucción. Muchos de los elementos exteriores del detector (como la cubierta protectora) no fueron considerados. Estos elementos se utilizan principalmente para evitar influencia de factores externos que no están presentes en las simulaciones. Además, la matriz de fibras para la lectura y el sistema de lectura es removido para evitar el lento trabajo de simulación de los procesos en las fibras. En su lugar la respuesta obtenida por el panel de lectura es aproximada usando un modelo estadístico basado en mediciones reales que permite obtener la cantidad aproximada de fotones que llegan a cada MPPC en base a la energía medida en cada cristal. Para obtener el modelo estadístico utilizado para simular la salida de cada MPPC dada la energía medida en cada cristal se asume que la cantidad de fotoelectrones que llegan a cada MPPC es una función de Poisson de la suma de energía que llegan al MPPC desde cada cristal. La energía que llega al MPPC desde cada cristal se modela como una distribución gaussiana centrada en la posición del cristal en el eje correspondiente al MPPC normalizada según el valor de energía depositada en el cristal. En términos matemáticos, los valores $p_{xl}$ y $p_{yk}$ correspondientes a la salida de la fibra $l$ y $k$ en el eje $x$ e $y$ respectivamente se calculan en base a las energías $E_{ij}$ correspondientes al cristal $(i,j)$. Primero se calculan los valores $u^l_{ij}$, $u_{ij}^k$ como: 
 \begin{eqnarray}
-u_{ij}^{l} = 20 \cdot E_{ij} \cdot \bigg[\frac{1}{2\sqrt{2\cdot\pi\cdot4}}\exp\bigg(\frac{-(l - i)^2}{2\cdot4}\bigg)\bigg],\nonumber\\
+u_{ij}^{l} = 20 \cdot E_{ij} \cdot \bigg[\frac{1}{2\sqrt{2\cdot\pi\cdot4}}\exp\bigg(\frac{-(l - i)^2}{2\cdot4}\bigg)\bigg],\\
 u_{ij}^{k} = 15 \cdot E_{ij} \cdot \bigg[\frac{1}{2\sqrt{2\cdot\pi\cdot6.25}}\exp\bigg(\frac{-(k - j)^2}{2\cdot6.25}\bigg)\bigg],\nonumber
+\label{eq:modelo}
 \end{eqnarray}
 entonces, $p_x^l$ y $p_y^k$ las salidas de las fibras $l$ y $k$ en los eje $x$ e $y$ son calculados como
 \begin{eqnarray}
 p_x^l = Poiss\big(\sum_{ij} u_{ij}^{l}\big),\nonumber\\
-p_y^k = Poiss\big(\sum_{ij} u_{ij}^{k}\big),\nonumber
+p_y^k = Poiss\big(\sum_{ij} u_{ij}^{k}\big).\nonumber
 \end{eqnarray}
  
 Estas salidas corresponden al conteo de foto electrones detectado por el MPPC $l$ o $k$.
@@ -59,7 +60,7 @@ Estas salidas corresponden al conteo de foto electrones detectado por el MPPC $l
     \label{fig:detector_min}
 \end{figure}
 
-Los experimentos fueron realizados en el rango 0.5-10 GeV. Se consideró un valor de ruido de 2.25 MeV, este valor fue seleccionado en base a la eficacia del algoritmo de clustering para identificar clusters correctamente en el rango de energía mencionado anteriormente (este valor es mucho menor que los valores utilizados en la literatura~\cite{PHOS}, debido al tamaño considerablemente menor de los cristales para el detector preshower). Los experimentos fueron realizados utilizando partículas $\gamma$, lanzadas distribuidas de manera uniforme e en el cuadrado central de 80x80 cm de la matriz de cristales (esto para evitar casos especiales en los cuales las partículas inciden muy cerca de los límites, en los cuales cierta energía es perdida provocando algunos problemas en la reconstrucción).
+Los experimentos fueron realizados en el rango 0.5-10 GeV. Se consideró un valor de ruido de 2.25 MeV, este valor fue seleccionado en base a la eficacia del algoritmo de clustering para identificar clusters correctamente en el rango de energía mencionado anteriormente (este valor es mucho menor que los valores utilizados en la literatura~\cite{alice1999technical}, debido al tamaño considerablemente menor de los cristales para el detector preshower). Los experimentos fueron realizados utilizando partículas $\gamma$, lanzadas distribuidas de manera uniforme e en el cuadrado central de 80x80 cm de la matriz de cristales (esto para evitar casos especiales en los cuales las partículas inciden muy cerca de los límites, en los cuales cierta energía es perdida provocando algunos problemas en la reconstrucción).
 
 \section{Algoritmo de reconstrucción}
 En esta sección se presenta el algoritmo de reconstrucción propuesto para el detector preshower y se estudia la eficacia en la reconstrucción de partículas mediante simulaciones. Debido a que el foco principal del detector preshower es detectar partículas $\gamma$ muy cercanas entre sí, que comúnmente provienen del decaimiento de un pión neutro, especial cuidado se debe tomar en los siguientes puntos:
@@ -73,13 +74,12 @@ El algoritmo completo de reconstrucción consiste de los siguientes procesos
 \item Construcción de clusters.
 \item Identificación de máximos en los clusters.
 \item Separación de lluvias solapadas.
-\item Rechazo de partículas solapadas que no puedan ser separadas.
 \item Reconstrucción de posición y energía.
 \item Resolución de ambigüedades.
 \end{enumerate}
 
 \subsection{Algoritmo de clustering}
-El algoritmo de clustering es el paso principal del algoritmo de reconstrucción. Para el detector preshower se decidió utilizar el algoritmo topológico presentado en la Sección~\ref{topológico}. El algoritmo de clustering topológico es un algoritmo muy utilizado en la práctica y permite la construcción de clusters de tamaños variables (a diferencia del algoritmo de ventana deslizante), lo que es importante para el detector preshower, debido a que la profuncidad menor de los cristales provoca una gran variabilidad en la cantidad de energía depositada en cada evento (esto a causa de que muchas de las partículas interactúan en la sección final del cristal, depositando sólo una parte de su energía). Otras opciones, como el algoritmo de clustering fuzzy, fueron rechazadas debido a la poca o nula utilización en experimentos reales de estos algoritmos y debido a que no utilizan toda la información disponible en el preshower (en el caso del algoritmo de clustering fuzzy, no se hace uso de la información disponible en la distribución lateral de la matriz de cristales).
+El algoritmo de clustering es el paso principal del algoritmo de reconstrucción. Para el detector preshower se decidió utilizar el algoritmo topológico presentado en la Sección~\ref{topológico}. El algoritmo de clustering topológico es un algoritmo muy utilizado en la práctica y permite la construcción de clusters de tamaños variables (a diferencia del algoritmo de ventana deslizante), lo que es importante para el detector preshower, debido a que la profundidad menor de los cristales provoca una gran variabilidad en la cantidad de energía depositada en cada evento (esto a causa de que muchas de las partículas interactúan en la sección final del cristal, depositando sólo una parte de su energía). Otras opciones, como el algoritmo de clustering fuzzy, fueron rechazadas debido a la poca o nula utilización en experimentos reales de estos algoritmos y debido a que no utilizan toda la información disponible en el preshower (en el caso del algoritmo de clustering fuzzy, no se hace uso de la información disponible en la distribución lateral de la matriz de cristales).
 
 El algoritmo de clustering topológico implementado para el detector preshower se resume en el Algoritmo~\ref{alg:algtopologico}.
 \begin{algorithm}
@@ -109,11 +109,10 @@ El algoritmo de clustering topológico implementado para el detector preshower se
 \end{algorithmic}
 \end{algorithm}
 
-Los valores \emph{cut1} y \emph{cut2} corresponden al umbral de ruido y a un umbral útil para identificar máximos respectivamente. Estos valores fueron elegidos observando la eficacia del algoritmo de clustering para identificar partículas en el umbral 0.5-10 GeV. Sin embargo se nota que el algoritmo es relativamente robusto a variaciones (no muy grandes) de estos valores. Los valores usados son $cut1 = 2.25$ y $cut2 = 3.75$. 
+Los valores \emph{cut1} y \emph{cut2} corresponden al umbral de ruido y a un umbral útil para identificar máximos respectivamente. Estos valores fueron elegidos observando la eficacia del algoritmo de clustering para identificar partículas en el umbral 0.5-10 GeV. Sin embargo, se nota que el algoritmo es relativamente robusto a variaciones (no muy grandes) de estos valores. Los valores usados son $cut1 = 2.25$ y $cut2 = 3.75$. 
 
-Notar que el algoritmo no es exactamente igual al algoritmo topológico presentado en la Sección ~\ref{topológico}. De este se ha quitado al recombinación de clusters y el umbral utilizado en la decisión de utilizar el vecino como semilla o no, en cambio todos los vecinos son utilizados como semilla y de la separación de clusters se encarga el algoritmo de unfolding. 
-
-El algoritmo continua con la búsqueda máximos locales en cada uno de los clusters por separado. 
+Notar que el algoritmo no es exactamente igual al algoritmo topológico presentado en la Sección ~\ref{topológico}. De este se ha quitado, primero, la recombinación de clusters, debido a que de la separación de lluvias adyacentes y solapadas se encarga el algoritmo de unfolding y segundo, se ha quitado el umbral utilizado en la decisión de utilizar el vecino como semilla o no, en cambio todos los vecinos son utilizados como semilla. Esto último debido a que las colas de la lluvia son muy importantes para lograr una buena reconstrucción en el detector preshower.
+Teniendo los clusters identificados, el algoritmo continua con la búsqueda máximos locales en cada uno de los clusters por separado. 
 
 \subsection{Búsqueda de máximos}
 El siguiente paso del algoritmo es la búsqueda de máximos en cada uno de los clusters encontrados. El análisis posterior depende de la cantidad de máximos encontrados en cada cluster. En caso que se encuentre sólo un máximo, entonces se considera que el cluster ha sido originado por una sola lluvia o puede ser originado por más de una lluvia pero imposibles de separar. En este caso se analiza, en caso de ser posible, si el cluster proviene de más de una partícula, si no, la posición de la partícula incidente y su energía puede ser reconstruida. Si el cluster posee dos o más máximos, entonces se considera una superposición de lluvias electromagnética y el algoritmo de unfolding es aplicado con la finalidad de separar las lluvias. 
@@ -135,21 +134,210 @@ Debido a lo anterior, se ha decidido utilizar el algoritmo presentado en la Secc
 \end{figure}
 
 \subsection{Algoritmo de unfolding}
-El método a utilizar para la separación de lluvias solapadas es el presentado en la Sección~\ref{solapamiento}. El método se basa en el conocimiento de la distribución lateral de la lluvia en los cristales, por lo que primero la distribution de respuesta lateral unidimensional debe ser calculada y parametrizada para ser usada en la separación de la energía depositada en celdas solapadas. La distribución lateral puede ser calculada mediante simulaciones. Para esto se simularon 2500 eventos, cada uno correspondiente a un gamma de 10 GeV lanzado en las dos celdas centrales. Entonces, el conteo de foto-electrones en una celda vs la distancia entre el centro de la celda y la posición incidente es graficado. La función obtenida se muestra en la Figura~\ref{lateral}. Sobre estos datos se ajusta la función~\ref{eq:lateral} que provee una parametrización sobre los datos.  
+El método a utilizar para la separación de lluvias solapadas es el presentado en la Sección~\ref{solapamiento}. El método se basa en el conocimiento de la distribución lateral de la lluvia en los cristales, por lo que primero la distribution de respuesta lateral unidimensional debe ser calculada y parametrizada para ser usada en la separación de la energía depositada en celdas solapadas. La distribución lateral puede ser calculada mediante simulaciones. Para esto se simularon 2500 eventos, cada uno correspondiente a un gamma de 10 GeV lanzado en las dos celdas centrales. Entonces, el conteo de foto-electrones en una celda vs la distancia entre el centro de la celda y la posición incidente es graficado. La función obtenida se muestra en la Figura~\ref{fig:lateral}. Sobre estos datos se ajusta la función~\ref{eq:lateral} que provee una parametrización sobre los datos.  
 \begin{eqnarray}
-f(r,E) = \begin{cases} 1.06 \cdot A \cdot \exp{-7.31 \cdot r^{1.28}}   & r < 0.6 \\
-39.69 \cdot A \cdot \exp{-8.23 \cdot r^{0.17}} & r \geq 0.6 \end{cases},
+f(r,E) = \begin{cases} A \cdot \exp(-0.09 \cdot r^{1.89})  & r <  26\\
+ A' \cdot \exp(-0.1 \cdot r) & r \geq 26 \end{cases},
 \label{eq:lateral}
 \end{eqnarray}
-donde $r$ es la distancia de la celda a la posición incidente en cm, $A$ es una constante de normalización que corresponde al conteo estimado de fotoelectrones de la lluvia. Las simulaciones entregan curvas laterales muy similares para diferentes gamas con diferentes energías, por lo que la dependencia en $E$ de la función esta sólo contenida en el parámetro de normalización.  
+donde $r$ es la distancia de la celda a la posición incidente en cm, $A$ es una constante de normalización que corresponde al conteo estimado de fotoelectrones de la lluvia. Las simulaciones entregan curvas laterales muy similares para diferentes gamas con diferentes energías, por lo que la dependencia en $E$ de la función esta sólo contenida en el parámetro de normalización. El ajusta se realiza utilizando el paquete \emph{Minuit} del framework \emph{Root}~\cite{antcheva2009root}. Los errores en cada uno de los bins en el histograma corresponden al error estándar en la media $\sigma / \sqrt{n}$.
 
-El algoritmo de unfolding comienza con una estimación del conteo de fotoelectrones y posición de las lluvias correspondientes a cada máximo. Para esto se utilizan los valores de conteo y posición central de las celdas correspondientes a los máximos locales. Entonces algoritmo continua de acuerdo a lo explicado en la Sección~\ref{solapamiento}, adaptado para el caso unidimensional,  con la diferencia que el algoritmo continua si cualquiera de las posiciones estimada para los clusters en uno de los ejes cambia en más de 0.01 celdas. En caso que el algoritmo no converga luego de 20 iteraciones el cluster es descartado. El algoritmo completo para el caso unidimensional del detector preshower es resumido en el diagrama de la Figura~\ref{fig:algunfolding}. 
+\begin{figure}[t]
+\makebox[\textwidth][c]{\includegraphics[width=15cm]{figure/lateralfit.pdf}}
+%{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
+\caption[Dos]{ Gráfico del conteo de fotoelectrones para cada una de las celdas respecto a su distancia a la posición incidente de la partícula (en una de los ejes). Los valores son calculados para un gamma de 10 GeV en incidencia normal. En rojo se muestra la parametrización de la curva utilizando la ecuación~\ref{eq:lateral}.  \label{fig:lateral}}
+\end{figure}
+
+
+El algoritmo de unfolding comienza con una estimación del conteo de fotoelectrones y posición de las lluvias correspondientes a cada máximo. Para esto se utilizan los valores de conteo y posición central de las celdas correspondientes a los máximos locales. Entonces algoritmo continua de acuerdo a lo explicado en la Sección~\ref{solapamiento}, adaptado para el caso unidimensional,  con la diferencia que el algoritmo continua si cualquiera de las posiciones estimada para los clusters en uno de los ejes cambia en más de 0.01 celdas. En caso que el algoritmo no converga luego de 20 iteraciones el cluster es descartado. 
+
+%El algoritmo completo para el caso unidimensional del detector preshower es resumido en el diagrama de la Figura~\ref{fig:algunfolding}. 
 
 \subsection{Reconstrucción de posición y energía}
 
+Como se mencionó en le Sección~\ref{posicion}, la forma más simple de reconstruir la posición de un partícula incidente es usando el centro de gravedad, expuesto en la ecuación~\ref{eq:weightedsum}.  Donde $w_i$ en la suma con pesos correspondería al conteo de fotoelectrones en cada una de las celdas. Se sabe que esta ecuación produce errores sistemáticos dependiendo de la posición dentro del cristal en la que incide la partícula, esto debido a la subvaloración de las colas exponenciales en la ecuación. Para observar si esto ocurre para el detector preshower se gráfica la posición incidente $x_{inc}$ versus la posición reconstruida $x_{rec}$ media para varias posición de incidencia en el cristal central para una partícula gamma de 10 GeV. Como se observa en la Figura~\ref{fig:curvaS}~a), para el detector preshower existe un error sistemático en la reconstrucción utilizando el centro de gravedad, la forma S de la curva muestra que las posiciones son reconstruidas erróneamente en las posiciones lejos de los límites o lejos del centro del cristal (esto puede ser explicado debido a la cantidad de energía que se filtra al resto de los cristales, en el centro la mayoría de la energía esta en el cristal de incidencia, por lo que la posición puede ser reconstruida correctamente, mientras que en los límites la mayoría de la energía esta en los cristales aledaños, permitiendo una buena reconstrucción también).
+
+En la Sección~\ref{posicion} se presentó un método simple para solucionar el problema que presenta la ecuación del centro de gravedad. Este método se basa en la ecuación~\ref{eq:weightedsumexp}, que se encarga automáticamente de las colas con forma exponencial de la lluvia electromagnética en el detector preshower. Para utilizar esta ecuación es necesario definir el valor $w_0$. Para esto se utilizaron simulaciones. Se midió el error medio de reconstrucción $<x_{rec} - x_{inc}> $ para diferentes valores de $w0$ para gammas incidentes de manera normal y uniformemente distribuidos en el rectángulo central de 40x40 mm. Se midieron los valores para gammas de 5, 10 y 15 GeV. En la Figura~\ref{fig:w0error} se muestran los resultados, en base a esto se decidió utilizar un $w_0 = 3$ que presenta la menor perdida de resolución a diferentes energías. En la Figura~\ref{fig:curvaS}~b) se muestra la misma curva S, obtenida anteriormente que gráfica la posición reconstruida versus la posición incidente. Se observa que los errores sistemáticos ahora son mucho menores, solucionando el problema que presenta el centro de gravedad.
+
+\begin{figure}[t]
+\makebox[\textwidth][c]{\includegraphics[width=15cm]{figure/w0error.pdf}}
+%{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
+\caption[Dos]{ Error de reconstrucción versus valor de $w_0$ en~\ref{eq:weightedsumexp} para el método de reconstrucción de posición \label{fig:w0error}}
+\end{figure}
 
 
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.9\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/position_no_w.pdf}
+        \caption{Posición reconstruida utilizando el método de centro de gravedad. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.9\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/position_w.pdf}
+        \caption{Posición reconstruida utilizando la ecuación~\ref{eq:weightedsumexp}. }
+    \end{subfigure}
 
+    \caption{Gráfico de posición incidente $x_{inc}$ versus posición reconstruida $x_{rec}$ (para uno de los ejes). En el gráfico se muestran los valores medios para la posición reconstruida en varias posiciones de incidencia. El gráfico permite observar los errores sistemáticos que se presentan debido a las diferentes posiciones de incidencia dentro de un mismo cristal. }
+    \label{fig:curvaS}
+\end{figure}
+
+\subsection{Resolución de ambigüedades}
+Una gran diferencia entre el sistema de lectura del detector Preshower y los sistemas de lecturas comunes de otros detectores es que la información del detector preshower es obtenida por dos arreglos de MPPC ubicados en los extremos derecho y superior de la matriz de cristales. Cada uno de estos arreglos de lectores sólo recibe una proyección de la energía en el plano unidimensional, mientras que la posición debe ser reconstruida en el plano bidimensional. Esto provoca ciertas ambigüedades que deben ser resueltas si se quiere obtener la posición incidente de la partícula. Tal como se observa en la Figura~\ref{fig:ambig}, este sistema provoca situaciones en las que es difícil combinar las posiciones incidentes unidimensionales para reconstruir la posición bidimensional. Si, por ejemplo, en uno de los ejes se observa sólo una partícula pero en el otro se observan dos, significa que la partícula aparece solapada en uno de los ejes y la energía correspondiente a cada partícula puede ser identificada en base a la reconstrucción del eje en que se observan ambas partículas. Por otro lado, considerar que en ambos ejes se observan dos partículas, entonces no es claro que posición en uno de los ejes corresponde a que posición en el otro eje, es decir, sólo considerando la información de posición, es imposible decir si es que la reconstrucción debiese ser (X1, Y1) y (X2, Y2) o (X1, Y2) y (X2, Y1). 
+
+El problema se complica más aún cuando más de dos partículas inciden, en tales casos las combinaciones posibles crecen factorialmente con el número de partículas observadas en los ejes ($\mathcal{O}((N_x + N_y)!)$).
+
+Ahora, es posible solucionar este problema considerando el conteo de fotoelectrones reconstruidos para cada partícula en cada eje. Debido a que el valor medido en cada eje es una proyección de la suma de conteos de los cristales por los que pasa la fibra que llega al lector, entonces, clusters con energías similares (no iguales, ya que existe algo de perdida en la propagación) en distintos ejes corresponderán a la misma partícula. Para esto debemos asumir, primero, que las perdidas en la propagación de fotones de los cristales a las fibras es despreciable con respecto a la energía depositada por la partícula y segundo que dos partículas no depositarán exactamente la misma energía. Debido a que la interacción de la partícula con el material en el detector preshower es un proceso probabilístico, es muy poco probable que dos partículas interactúen en la misma posición y por consiguiente depositen la misma energía.  Basado en esto es posible resolver las ambigüedades en la reconstrucción mediante la unión de clusters con energías parecidas en los distintos ejes. 
+
+Para el caso más simple, en el que dos partículas inciden en el detector preshower un algoritmo de resolución de ambigüedades en presentado en Algoritmo~\ref{alg:resolucion}.
+
+\begin{algorithm}
+\caption{Resolución de ambigüedades}
+\label{alg:resolucion}
+\begin{algorithmic}[1]
+\State{$X, E_x \leftarrow$ Reconstruction1D(X)}
+\State{$Y, E_y \leftarrow$ Reconstruction1D(Y)}
+\If{$len(X) > 1$ and $len(Y) > 1$}
+	\State{$D_0 = | E_x[0] - E_y[0] |$}
+	\State{$D_1 = | E_x[0] - E_y[1] |$}
+	\If{$D_0 < D_1$}
+		\State{$P_0 = (X[0], Y[0])$}
+		\State{$P_1 = (X[1], Y[1])$}
+		\State{$E_0, E_1 = E_x[0], E_x[1]$}
+	\Else{}
+		\State{$P_0 = (X[0], Y[1])$}
+		\State{$P_1 = (X[1], Y[0])$}
+		\State{$E_0, E_1 = E_x[0], E_x[1]$}
+	\EndIf
+\ElsIf{$(len(X) > 1$ and $len(Y) == 1)$ } \Comment{Similar para el caso opuesto.}
+	\State{$P_0 = (X[0], Y[0])$}
+	\State{$P_1 = (X[1], Y[0])$}
+	\State{$E_0, E_1 = E_x[0], E_x[1]$}
+\ElsIf{$(len(X) == 1$ and $len(Y) == 1)$ } 
+	\State{$P_0 = (X[0], Y[0])$}
+	\State{$E_0, E_1 = E_x[0], E_x[1]$}
+\EndIf
+\end{algorithmic}
+\end{algorithm}
+
+Este caso es el más común e importante de identificar, ya que es el producido por el decaimiento de un pión neutro. Sin embargo el problema se puede complicar considerablemente más cuando más de dos partículas son identificadas en alguno de los ejes (varias combinaciones entre una, dos o más de dos partículas son posibles). Si el número de partículas es muy grande es muy costoso computacionalmente considerar todas las posibilidades, por lo que un algoritmo heurístico que permita encontrar la combinación más probable de partículas basado en el conteo de fotoelectrones de cada cluster sería una buena opción a considerar. Para esto se necesita estudiar y proponer un nuevo algoritmo para la tarea de resolución de ambigüedades, lo que queda fuera del alcance de este trabajo.
+
+\section{Análisis de resultados} 
+En esta sección se presentarán los resultados del algoritmo presentado. Se debe notar que el propósito principal del detector preshower es identificar partículas muy cercanas entre sí. La reconstrucción de posición y de energía son un trabajo conjunto de todas las secciones del detector. Si bien la reconstrucción de posición se puede realizar con el detector preshower, un trabajo más preciso puede ser realizado por otro tipos de detectores especializados para la tarea. Por otro lado, la reconstrucción de energía es un trabajo realizado por otro tipos de detectores en la cadena de detección y no es proposito del detector preshower. El detector presentado aquí sólo es capaz de medir el conteo de fotoelectrones que se comporta como una distribución de Poisson con media relacionada a la energía detectada. En base a lo anteriormente dicho los resultados presentados en esta sección se concentrarán en evaluar la capacidad del detector para la separación de partículas cercanas y su capacidad para reconstruir su posición. Otros resultados pueden ser encontrados en el Apéndice~\ref{ApendiceB}. 
+
+Los resultados presentados en esta sección se obtuvieron mediante simulaciones en el rango 1-15GeV. Se utilizaron 5000 pares de partículas gamas lanzadas en posiciones de incidencia uniformemente distribuidas en el cuadrado de 40x40 mm central de la matriz de cristales y con ángulo de incidencia perpendicular a la cara frontal del detector preshower. No se presentan experimentos con ángulos de incidencia no perpendicular y estos casos se analizarán con más profundidad en las conclusiones.
+
+\subsection{Identificación de partículas cercanas}
+
+La Figura~\ref{fig:clusters} muestra para diferentes combinaciones de partículas de distintas energías a que distancia (entre las partículas) dos partículas pueden ser identificadas por el detector. Se observa que clusters con un sólo máximo (cuando dos partículas son imposibles de detectar) son observados principalmente a distancias pequeñas entre las dos partículas ($\leq 5$ unidades de celda, es decir $\leq 20$ mm). Por otro lado, clusters con dos máximos que deben ser separados mediante el procedimiento de unfolding se observan entre las 5 y 20 unidades de celda (25-100 mm). Los clusters totalmente separados se observan en poca cantidad y principalmente sobre la distancia de 15 unidades de celdas  (75 mm). También se observa que existe un límite claro para la resolución de dos partículas del detector preshower, el que es 5 unidades de celda (o 20 mm).
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_1/2D_clusters.pdf}
+        \caption{10 + 1 GeV. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_5/2D_clusters.pdf}
+        \caption{10 + 5 GeV. }
+    \end{subfigure}\\
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_10/2D_clusters.pdf}
+        \caption{10 + 10 GeV. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_15/2D_clusters.pdf}
+        \caption{10 + 15 GeV. }
+    \end{subfigure} 
+    \caption{Número de clusters identificables como una función de la distancia entre las partículas incidentes. Se analizaron 4 casos (a) 10 GeV + 1 GeV $\gamma$, (b) 10 GeV + 5 GeV $\gamma$, (c) 10 GeV + 10 GeV $\gamma$, (d) 10 GeV + 15 GeV $\gamma$. Para cada uno de los casos se muestran los clusters con sólo un máximo, con dos máximos y los clusters totalmente separados.   }
+    \label{fig:clusters}
+\end{figure}
+
+\subsection{Reconstrucción de posición}
+Para estudiar la eficacia del algoritmo para reconstruir la posición de las partículas incidentes se observó el error de reconstrucción medio entre la posición reconstruida por el algoritmo de reconstrucción y la posición de incidencia de la partíacula ($<X_{rec} - X_{inc}$>). Esto para pares de partículas de 10 GeV + 1 GeV, 10 GeV + 5 GeV, 10 GeV + 10 GeV , 10 GeV + 15 GeV. Se estudió el error de reconstrucción en los casos en que el algoritmo de unfolding deba ser aplicado y en los casos en que ambas partículas forman dos clusters separados (el caso de un sólo máximo no se consideró). En la Figura~\ref{fig:reconstruccion} se muestran histogramas para el error de reconstrucción para cada uno de los casos mencionados anteriormente. Mientras que en el Cuadro~\ref{tab:resolucion} se resumen los valores para cada uno de los casos. 
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|p{1.5cm} p{1cm}| p{3cm} p{3cm} p{3cm}  |}
+\hline
+    &  & \multicolumn{3}{c|}{Resolución posición [mm]} \\
+\multicolumn{2}{|c|}{Energias  [GeV]} & Unfolded & Separados & Total \\ \hline
+\multirow{2}{*}{10 + 1} & 10  & 1.416 $\pm$ 1.102 & 1.075 $\pm$ 0.7435 & 1.3777 $\pm$ 1.0731 \\ 
+ & 1  & 1.789 $\pm$ 1.45  & 1.025 $\pm$ 0.6956 & 1.7032 $\pm$ 1.4067 \\ \hline
+ \multirow{2}{*}{10 + 5} & 10  & 1.562 $\pm$ 1.189 & 1.183 $\pm$ 1.122 & 1.54 $\pm$ 1.1885 \\ 
+ & 5  & 1.683 $\pm$ 1.26 & 1.144 $\pm$ 0.7378 & 1.6517 $\pm$ 1.2421 \\ \hline
+ 10 + 10 & 10  & 1.571 $\pm$ 1.21 & 1.088 $\pm$ 0.8137 & 1.5532 $\pm$ 1.2011 \\ \hline
+ \multirow{2}{*}{10 + 15} & 10  & 1.623 $\pm$ 1.302 & 1.413 $\pm$ 1.012 & 1.6157 $\pm$ 1.2936 \\ 
+ & 15  & 1.556 $\pm$ 1.184 & 1.109 $\pm$ 0.815 & 1.5406 $\pm$ 1.1760 \\ \hline
+\end{tabular}
+\caption{Error de reconstrucción para partículas $\gamma$ solapadas y totalmente separadas. Se presentan resultados para partículas de 1, 5,10 y 15 GeV.  \label{tab:resolucion}}
+\end{table}
+
+Se observa que hay una pequeña dependencia entre el error de reconstrucción y la energía de la partícula incidente. Existe una mejora menor cuando la partícula tiene mayor energía, esto es claro en el caso 10+1 donde el error para la partícula de 1 GeV es claramente mayor que para la partícula de 10 GeV. Esto se debe a que la lluvia de la partícula de 10 GeV cubre a la de 1 GeV dificultando la reconstrucción de posición. Sin embargo, las diferencias entre los errores de reconstrucción para el rango 1-15 GeV son relativamente pequeñas, lo que muestra la dependencia menor del algoritmo de reconstrucción de posición con la energía de la partícula incidente. La error de reconstrucción es similar para el caso de clusters separados y clusters solapados donde el algoritmo de unfolding debe ser utilizado, esto demuestra la capacidad del algoritmo de unfolding para separar partículas cercanas. Existe una pequeña diferencia entre ambos errores, lo que es de esperar ya que el algoritmo de unfolding agrega un paso extra de estimación, además que el cubrimiento mutuo de las lluvias electromagnéticas dificultan la reconstrucción de posición.
+
+La precisión de la reconstrucción es muy buena en comparación con otros detectores, esto se profundizará en la sección de conclusiones.
+
+Para un análisis más detallado de los errores de reconstrucción para las distintas situaciones que se presentan en el algoritmo de reconstrucción el lector puede dirigirse al Apéndice B.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_1/x_axis_small_1.pdf}
+        \caption{10 + 1 GeV. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_1/x_axis_small_2.pdf}
+        \caption{10 + 1 GeV. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_5/x_axis_small_1.pdf}
+        \caption{10 + 5 GeV. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_5/x_axis_small_2.pdf}
+        \caption{10 + 5 GeV. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_10/x_axis_small_1.pdf}
+        \caption{10 + 10 GeV. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_10/x_axis_small_2.pdf}
+        \caption{10 + 10 GeV. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip, width=\textwidth]{figure/10_15/x_axis_small_1.pdf}
+        \caption{10 + 15 GeV. }
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[clip,width=\textwidth]{figure/10_15/x_axis_small_2.pdf}
+        \caption{10 + 15 GeV. }
+    \end{subfigure}\\
+    \caption{Histogramas del error de reconstrucción $X_{rec} - X_{inc}$ para varias combinaciones de partículas $\gamma$. En cada gráfico se muestra el error para cada una de las partículas por separado (en el caso de 10+10 GeV sólo se muestra el error para 10 GeV).}
+    \label{fig:reconstruccion}
+\end{figure}
+
+Notar que sólo se presentó el error para $X$, los errores en $Y$ son presentados en el Apéndice B. El error para el eje $Y$ es mayor que para el eje $X$, la razón de esto se estudiará con mayor profundidad en las conclusiones. 
+
+\subsection{Reconstrucción de piones neutros}
+
+Para estudiar la capacidad del detector preshower para detectar piones neutros decayendo en dos gammas muy cercanos entre sí se utilizaron simulaciones de piones lanzados al detector de manera perpendicular. Sólo los piones que decaen y para los cuales ambos gammas llegan al detector fueron considerados. Los piones fueron lanzados desde una distancia de 250~[cm] a la cara frontal del detector. Se utilizó un rango de energía de 10-60 [GeV]. En la Figura~\ref{fig:piones} se observa la fracción de partículas gammas producidas por piones neutros que fueron detectadas como dos partículas diferentes. Se observa que a mayor energía es más difícil identificar el decaimiento del pión neutro como dos partículas separadas. Esto se debe a que a mayor energía, menor el ángulo de apertura entre los gammas, lo que hace mas difícil la identificación. Incluso para energías bajas no se identifican la totalidad de piones, esto se produce porque a menor energía existe mayor probabilidad de que se produzca un gamma de baja energía que no sea identificado por el detector preshower.  
+
+\begin{figure}[t]
+\makebox[\textwidth][c]{\includegraphics[width=15cm]{figure/pi0_plot.pdf}}
+%{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
+\caption[Dos]{ Fracción de $\pi^0$ decayendo en dos gammas que golpean el detector y que son identificados como dos gammas por el algoritmo de reconstrucción. Se presentan resultados para gammas en el rango de energía 10-60 GeV.  \label{fig:piones}}
+\end{figure}
 
 
 
