@@ -1,15 +1,15 @@
 \chapter{Detector Preshower \label{detector}}
-En esta sección se procederá a describir, de manera general, el diseño y funcionamiento del detector preshower. Como ya se mencionó, la finalidad del detector preshower es detectar partículas (neutras y cargadas) muy cercanas entre sí, por lo que el diseño esta pensado en pos de esta finalidad. Un primer acercamiento por parte del equipo experimental de física nuclear y de altas energías de la UTFSM corresponde a un prototipo simple para probar el funcionamiento del detector antes de entrar en una fase de producción.
+En esta sección se procederá a describir de manera general, el diseño y funcionamiento del detector preshower. Como ya se mencionó, la finalidad del detector preshower es detectar partículas (neutras y cargadas) muy cercanas entre sí, por lo que el diseño está pensado en pos de esta finalidad. Un primer acercamiento por parte del equipo experimental de física nuclear y de altas energías de la UTFSM corresponde a un prototipo simple para probar el funcionamiento del detector antes de entrar en una fase de producción.
 A continuación, se presentará el diseño general del prototipo de preshower y su funcionamiento.
 
 \section{Diseño}
-El detector preshower es un detector calorímetro electromagnético del tipo homogéneo. Como se describió en la Sección 2, un detector calorímetro se conforma principalmente de un material de producción de lluvias (pueden ser cristales orgánicos e inorgánicos, líquido, gas, etcétera) y un sistema de amplificación y lectura de las señales producidas (por ejemplo un sistema de fotomultiplicadores).
+El detector preshower es un detector calorímetro electromagnético del tipo homogéneo. Como se describió en la Sección 2, un detector calorímetro se conforma principalmente de un material de producción de lluvias (pueden ser cristales orgánicos e inorgánicos, líquido, gas, etcétera) y un sistema de amplificación y lectura de las señales producidas (por ejemplo, un sistema de fotomultiplicadores).
 En el prototipo de preshower estas dos secciones principales son la matriz de cristales, que producen las lluvias electromagnéticas y el sistema de lectura que convierte esta lluvia en una señal medible. Un esquema a alto nivel del diseño del detector se observa en le Figura~\ref{fig:preshower}.
 
 \begin{figure}[t]
 \makebox[\textwidth][c]{\includegraphics[width=15cm]{figure/preshower_proto_2.png}}
 %{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
-\caption{Prototipo de preshower, en este se puede observar la matriz de cristales (de color azul), el sistema de lectura y el material de cobertura.\label{fig:preshower}}
+\caption{Prototipo de preshower, en este se puede observar la matriz de cristales en color azul, el sistema de lectura en color verde (fibras) y amarillo (fotomultiplicadores) y el material de cobertura en gris.\label{fig:preshower}}
 \end{figure}
 
 
@@ -52,7 +52,7 @@ La luz producida por los cristales centelleadores es recolectada por una matriz 
 \caption{Disposición de la matriz de fibras ópticas. \label{fig:fibras}}
 \end{figure}
 
-La disposición del sistema de lectura en el detector preshower es poco común. Los lectores se encuentran en dos de los bordes perpendiculares de la matriz como se muestra en la Figura~\ref{fig:lectura}. Debido a esto, la señal observada consistirá en dos vectores de datos unidimensionales que luego deben ser procesados de manera de obtener la posición incidente en el plano cartesiano. La luz emitida por los cristales centelleadores es guiada por las fibras ópticas a dos arreglos (uno para cada borde), de 25 (50 en total) fotomultiplicadores de silicio (MPPC por \emph{Multi-Pixel Photon Counter}).
+La disposición del sistema de lectura en el detector preshower es poco común. Los lectores se encuentran en dos de los bordes perpendiculares de la matriz como se muestra en la Figura~\ref{fig:lectura}. Debido a esto, la señal observada consistirá en dos vectores de datos unidimensionales que luego deben ser procesados de manera de obtener la posición incidente en el plano. La luz emitida por los cristales centelleadores es guiada por las fibras ópticas a dos arreglos (uno para cada borde), de 25 (50 en total) fotomultiplicadores de silicio (MPPC por \emph{Multi-Pixel Photon Counter}).
 \begin{figure}[t]
 \makebox[\textwidth][c]{\includegraphics[width=10cm]{figure/detector_proto.png}}
 %{\centering \includegraphics[width=10cm]{figure/collision.JPG}}
@@ -61,7 +61,7 @@ La disposición del sistema de lectura en el detector preshower es poco común. Lo
 
 El funcionamiento de los fotomultiplicadores fue descrito en la Sección \ref{sec:fotomultiplicadores}. Estos convierten la luz de entrada en pulsos de corriente medibles mediante la amplificación de los fotoelectrones en los diodos. En específico, los MPPC utilizados en el detector preshower poseen 1440 fotodiodos de avalancha, cada uno con una ganancia de $2.75$x$10^5$. Finalmente, el pulso es digitalizado utilizando módulos de conversión de carga y conversores análogo-digital (ADC). Los datos entregados en formato digital son almacenados en un buffer de salida que puede ser leído con posterioridad. Los buffer guardan los valores de carga [pC] de cada uno de los fotomultiplicadores, obteniendo finalmente dos arreglos de 25 valores (25 para cada eje) de carga entre 0-400[pC] (1 coulumb = $6.25$x$10^8$ electrones). El funcionamiento del sistema de lectura es mucho más complejo que el explicado aquí, sin embargo, no es extrictamente necesario comprender a cabalidad el mecanismo de lectura para explicar el algoritmo de reconstrucción. Un tratamiento más completo del sistema de lectura puede ser encontrado en~\cite{tesis-esteban}. Importante es notar el formato de salida del sistema de lectura y las posibles complicaciones que este puede significar para la reconstrucción de las partículas incidentes, en las próximas secciones se procederá a ahondar más en este tema.
 
-En la siguiente sección se introducirá el algoritmo de reconstrucción, se explicaran las tareas necesarias para el proceso de reconstrucción y se analizará en que manera el algoritmo puede producir información útil para la tarea principal que se desea lograr con el detector preshower: separar partículas muy cercanas entre sí.
+En la siguiente sección se introducirá el algoritmo de reconstrucción, se explicarán las tareas necesarias para el proceso de reconstrucción y se analizará en que manera el algoritmo puede producir información útil para la tarea principal que se desea lograr con el detector preshower: separar partículas muy cercanas entre sí.
 
 
 
